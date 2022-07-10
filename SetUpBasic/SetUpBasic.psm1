@@ -1,3 +1,4 @@
+
 function GetInfo2{
     param($ComputerName)
     Get-WmiObject -ComputerName $ComputerName -Class Win32_BIOS
@@ -12,6 +13,7 @@ function GetInfo{
 
 function GetInfo4{
     GetInfo3 -ComputerName "localhost"
+    scrip
 }   
 
 function iamadmin{

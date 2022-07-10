@@ -1,5 +1,5 @@
 # SetUpBasic
-Powershell module for basic windows os configuration, maintaince
+Powershell module for basic windows os configuration, maintenance
 
 You can find the current published Module version here. https://www.powershellgallery.com/packages/SetUpBasic/
 

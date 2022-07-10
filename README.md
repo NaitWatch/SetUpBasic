@@ -39,7 +39,7 @@ Uninstall-Module -Name SetUpBasic ; Remove-Module -Name SetUpBasic
 
 ### Show module and paths
 ```
-Get-Module -ListAvailable SetUpBasic
+Get-Module -ListAvailable SetupBasic | Format-List
 ```
 
 ### Show standard info

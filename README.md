@@ -12,23 +12,44 @@ Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 Revert: Set-PSRepository -Name "PSGallery" -InstallationPolicy Untrusted
 
 ## Installation:
+I recommend adding `-Scope AllUsers` the module than will installed C:\Program Files\WindowsPowerShell\Modules instead of a user specific directory. This of course required Administrator rights.
 
 ### Install
+```
 Install-Module -Name SetupBasic
+```
+```
+Install-Module -Name SetupBasic -Scope AllUsers
+```
 
 ### Update
-Update-Module -Name SetUpBasic
+```
+Update-Module -Name SetupBasic
+```
+```
+Update-Module -Name SetUpBasic -Scope AllUsers
+```
 
 ### Uninstall
-Uninstall-Module -Name SetUpBasic
+```
+Uninstall-Module -Name SetupBasic
+```
+```
+Uninstall-Module -Name SetUpBasic -Scope AllUsers
+```
+
 
 ## Listing:
 
 ### Show module and paths
+```
 Get-Module -ListAvailable SetUpBasic
+```
 
 ### Show standard info
+```
 Find-Module -Name SetupBasic
+```
 
 ## Current list of commands exported
 

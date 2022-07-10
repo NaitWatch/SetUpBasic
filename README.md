@@ -10,3 +10,7 @@ Uninstall-Module -Name SetUpBasic
 Find-Module -Name SetupBasic
 
 Get-Module -ListAvailable SetUpBasic
+
+Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+
+Get-PSRepository

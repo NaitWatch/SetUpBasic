@@ -5,11 +5,15 @@ You can find the current published Module version here. https://www.powershellga
 
 ## To trust the PowershellGallery
 
-### Add trust
-Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+### Add powershell gallery and trust it to avoid confirmation dialogs.
+```
+Register-PSRepository -Default 2>$null ; Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+```
 
-### Remove trust
-Revert: Set-PSRepository -Name "PSGallery" -InstallationPolicy Untrusted
+### Removing trust of a repository
+```
+Set-PSRepository -Name "PSGallery" -InstallationPolicy Untrusted
+```
 
 ## Installation:
 I recommend adding `-Scope AllUsers` the module than will installed C:\Program Files\WindowsPowerShell\Modules instead of a user specific directory. This of course required Administrator rights.
@@ -18,32 +22,24 @@ I recommend adding `-Scope AllUsers` the module than will installed C:\Program F
 ```
 Install-Module -Name SetupBasic
 ```
-```
-Install-Module -Name SetupBasic -Scope AllUsers
-```
 
 ### Update
 ```
-Update-Module -Name SetupBasic
-```
-```
-Update-Module -Name SetUpBasic -Scope AllUsers
+Update-Module -Name SetUpBasic ; Remove-Module -Name SetUpBasic ; Import-Module -Name SetUpBasic ;  Find-Module -Name SetUpBasic
 ```
 
 ### Uninstall
 ```
-Uninstall-Module -Name SetupBasic
+Uninstall-Module -Name SetUpBasic ; Remove-Module -Name SetUpBasic
 ```
-```
-Uninstall-Module -Name SetUpBasic -Scope AllUsers
-```
+
 
 
 ## Listing:
 
 ### Show module and paths
 ```
-Get-Module -ListAvailable SetUpBasic
+Get-Module -ListAvailable SetupBasic | Format-List
 ```
 
 ### Show standard info

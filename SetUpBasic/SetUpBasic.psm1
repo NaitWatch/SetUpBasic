@@ -41,8 +41,7 @@ function SubOldModulCleanUp{
             Uninstall-Module -name $Name -RequiredVersion $CurrentModul.Version -ErrorAction SilentlyContinue
         }
      }
-     Write-Host "Current:"
-     Write-Host $LatestModul
+     Write-Host "Current: $($LatestModul) $($LatestModul.Version)"
 }
 
 function SubCleanUp{

@@ -42,11 +42,6 @@ function SubOldModulCleanUp{
 }
 
 function SubCleanUp{
-    param (
-        [Parameter(Mandatory)]
-        [string]$Name
-     )
-
      SubOldModulCleanUp -Name "SetUpBasic"
 }
 

@@ -28,6 +28,9 @@ function DownloadString {
 }
 
 
+
+#SubOldModulCleanUp -ModulName "SetUpBasic"
+
 #$ret = DownloadString -url "https://github.com/microsoft/winget-cli/releases/latest"
 
 #ExtractLinks2 -html $ret -url "https://github.com/microsoft/winget-cli/releases/latest"

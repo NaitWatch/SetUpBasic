@@ -30,7 +30,7 @@ function SubOldModulCleanUp{
 
      $LatestModul = (Get-Module -name $Name)
 
-     foreach ($CurrentModul in (Get-Module $Name -AllVersions)) {
+     foreach ($CurrentModul in (Get-Module $Name -All)) {
         if ($CurrentModul.Version -ne $LatestModul.Version) 
         {
             Write-Host "Remove-Module -FullyQualifiedName @{ModuleName = """$Name"""; ModuleVersion = """$($CurrentModul.Version)"""}"

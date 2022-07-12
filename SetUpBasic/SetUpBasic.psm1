@@ -34,9 +34,9 @@ function SubOldModulCleanUp{
         if ($CurrentModul.Version -ne $LatestModul.Version) 
         {
             Write-Host "Remove-Module -FullyQualifiedName @{ModuleName = """$Name"""; ModuleVersion = """$($CurrentModul.Version)"""}"
-            Remove-Module -FullyQualifiedName @{ModuleName = "$Name"; ModuleVersion = "$($CurrentModul.Version)"}
+            Remove-Module -FullyQualifiedName @{ModuleName = "$Name"; ModuleVersion = "$($CurrentModul.Version)"} -ErrorAction SilentlyContinue
             Write-Host "Uninstall-Module -name $Name -RequiredVersion $($CurrentModul.Version)"
-            Uninstall-Module -name $Name -RequiredVersion $CurrentModul.Version
+            Uninstall-Module -name $Name -RequiredVersion $CurrentModul.Version -ErrorAction SilentlyContinue
         }
      }
 }

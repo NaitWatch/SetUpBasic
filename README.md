@@ -21,14 +21,8 @@ Install-Module -Name SetupBasic -Scope CurrentUser -Force
 
 ### Update
 ```
-Update-Module -Name SetUpBasic ; Remove-Module -Name SetUpBasic ; Import-Module -Name SetUpBasic ;  Find-Module -Name SetUpBasic
+SubUpdate ; SubClean ; Import-Module -Name SetUpBasic -Force
 ```
-
-### Uninstall
-```
-Uninstall-Module -Name SetUpBasic ; Remove-Module -Name SetUpBasic
-```
-
 
 
 ## Listing:

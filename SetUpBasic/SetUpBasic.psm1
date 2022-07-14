@@ -1,17 +1,38 @@
   
+#Exported functions only
 
-function SubRefresh{
-    short
+# Find all *.ps1 files in the module's subtree and dot-source them
+foreach ($script in  (Get-ChildItem -File -LiteralPath $PSScriptRoot -Filter *.ps1)) { 
+  . "$PSScriptRoot\$script"
+}
+
+function SubUpdate{
+    PrivateSubUpdate
 }   
 
-function SubDump{
-    Write-Host "6"
-}   
+function SubClean{
+    PrivateSubClean -Name "SetUpBasic"
+}
 
-function Subiamadmin{
-    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-    $result = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-    Write-Host "$result"
+
+function SubInstallRestartTask{
+    PrivateCreateDir -Path "C:\TaskScheduler"
+    Copy-Item "$PSScriptRoot\TaskschedulerAssets\restart.ps1" -Destination "C:\TaskScheduler\restart.ps1"
+    EnableTaskSchedulerEventLog
+    EasyTaskscheduler -Name "Daily Reboot" -Program "C:\TaskScheduler\restart.ps1" -Time "04:00:00"
+}
+
+function SubInstallModUpTask{
+    PrivateCreateDir -Path "C:\TaskScheduler"
+    Copy-Item "$PSScriptRoot\TaskschedulerAssets\moduleupdates.ps1" -Destination "C:\TaskScheduler\moduleupdates.ps1"
+    EnableTaskSchedulerEventLog
+    EasyTaskscheduler -Name "Daily Module Updates" -Program "C:\TaskScheduler\moduleupdates.ps1" -Time "02:00:00" -LaunchAsapIfMissed $true
+    
+}
+
+
+function SubIsAdmin{
+    PrivateSubIsAdmin
 }   
 
 function SubFetchLink{
@@ -21,37 +42,4 @@ function SubFetchLink{
      )
      FetchStdLink -url $url -Contain @(".msixbundle")
 }
-
-function SubOldModulCleanUp{
-    param (
-        [Parameter(Mandatory)]
-        [string]$Name
-     )
-
-     $LatestModuls = (Get-Module -ListAvailable $Name) | Sort-Object Version -Descending
-     $LatestModul = $LatestModuls[0]
-     
-
-     foreach ($CurrentModul in $(Get-Module -ListAvailable $Name)) {
-        if ($CurrentModul.Version -ne $LatestModul.Version) 
-        {
-            Write-Host "Remove-Module -FullyQualifiedName @{ModuleName = """$Name"""; ModuleVersion = """$($CurrentModul.Version)"""}"
-            Remove-Module -FullyQualifiedName @{ModuleName = "$Name"; ModuleVersion = "$($CurrentModul.Version)"} -ErrorAction SilentlyContinue
-            Write-Host "Uninstall-Module -name $Name -RequiredVersion $($CurrentModul.Version)"
-            Uninstall-Module -name $Name -RequiredVersion $CurrentModul.Version -ErrorAction SilentlyContinue
-        }
-     }
-     Write-Host "Current: $($LatestModul) $($LatestModul.Version)"
-}
-
-function SubCleanUp{
-     SubOldModulCleanUp -Name "SetUpBasic"
-}
-
-#$ModuleName = 'navcontainerhelper';
-#$Latest = Get-InstalledModule $ModuleName; 
-#Get-InstalledModule $ModuleName -AllVersions | ? {$_.Version -ne $Latest.Version} | Uninstall-Module -WhatIf
-
-
-
 

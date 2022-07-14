@@ -10,17 +10,13 @@ You can find the current published Module version here. https://www.powershellga
 Register-PSRepository -Default 2>$null ; Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 ```
 
-### Removing trust of a repository
-```
-Set-PSRepository -Name "PSGallery" -InstallationPolicy Untrusted
-```
-
 ## Installation:
 I recommend adding `-Scope AllUsers` the module than will installed C:\Program Files\WindowsPowerShell\Modules instead of a user specific directory. This of course required Administrator rights.
 
 ### Install
 ```
-Install-Module -Name SetupBasic
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 ;
+Install-Module -Name SetupBasic -Scope CurrentUser -Force
 ```
 
 ### Update
@@ -49,10 +45,21 @@ Find-Module -Name SetupBasic
 
 ## Current list of commands exported
 
-### GetInfo
-Sample: GetInfo 'localhost'
+### SubUpdate
+```
+SubUpdate #Updates this powershell module
+```
 
-Description: Just a stub at the moment
+### SubClean
+```
+SubClean #Cleans up old version of this powershell module on the computer
+```
+
+### SubInstallModUpTask
+```
+SubInstallModUpTask #Installs a scheduled task on the computer to update powershell modules
+```
+
 
 
 

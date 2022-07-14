@@ -1,5 +1,6 @@
 
 function PrivateSubUpdate{
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Update-Module -Name SetUpBasic -Force
     #Get-InstalledModule -Name SetUpBasic -AllVersions | Where-Object {$_.Version -ne $(Get-InstalledModule -Name SetUpBasic).Version} | Uninstall-Module -Verbose
     #Import-Module -Name SetUpBasic -Force
@@ -24,6 +25,7 @@ function PrivateSubClean{
             Uninstall-Module -name $Name -RequiredVersion $CurrentModul.Version -ErrorAction SilentlyContinue
         }
      }
+     Import-Module -Name $Name -Force
      Write-Host "Current: $($LatestModul) $($LatestModul.Version)"
 }
 

@@ -17,6 +17,7 @@ function doo {
     $fileVersion = $fileVersion.replace($matches[0].Groups[0].Value,"ModuleVersion = '$newVersion'")
     $fileVersion | Out-File "$publishpath\SetUpBasic.psd1"
     Write-Host "Your published version will be: $newVersion"
+    Write-Host "Commit of version : $newVersion"
     
     
     [void][Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')

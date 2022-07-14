@@ -17,14 +17,14 @@ function SubClean{
 
 function SubInstallRestartTask{
     PrivateCreateDir -Path "C:\TaskScheduler"
-    Copy-Item "$PSScriptRoot\TaskschedulerAssets\restart.ps1" -Destination "C:\TaskScheduler\restart.ps1"
+    Copy-Item "$PSScriptRoot\TaskschedulerAssets\restart.ps1" -Destination "C:\TaskScheduler\restart.ps1" -Force
     EnableTaskSchedulerEventLog
     EasyTaskscheduler -Name "Daily Reboot" -Program "C:\TaskScheduler\restart.ps1" -Time "04:00:00"
 }
 
 function SubInstallModUpTask{
     PrivateCreateDir -Path "C:\TaskScheduler"
-    Copy-Item "$PSScriptRoot\TaskschedulerAssets\moduleupdates.ps1" -Destination "C:\TaskScheduler\moduleupdates.ps1"
+    Copy-Item "$PSScriptRoot\TaskschedulerAssets\moduleupdates.ps1" -Destination "C:\TaskScheduler\moduleupdates.ps1" -Force
     EnableTaskSchedulerEventLog
     EasyTaskscheduler -Name "Daily Module Updates" -Program "C:\TaskScheduler\moduleupdates.ps1" -Time "02:00:00" -LaunchAsapIfMissed $true
     

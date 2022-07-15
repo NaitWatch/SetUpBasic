@@ -144,17 +144,10 @@ function PrivateSubUpdate {
         Install-Module -Name SetUpBasic -Scope CurrentUser -Force -Repository "PSGallery" -AllowClobber -AcceptLicense
     }
     
-    $arr = GetModuleVersions $Name 
+    $arr = GetModuleVersions SetUpBasic 
 
-    if ($(PrivateSubIsAdmin))
-    {
-        $Machine5Modules = $arr | Where-Object {$_.DirType -eq [PowerShellDirectoryType]::PowerShell5ProgramFilesDirectory} | Sort-Object Version -Descending
-        Write-Host "Current Version: $($Machine5Modules[0].Version.ToString())"
-    }
-    else {
-        $CurrentUser5Modules = $arr | Where-Object {$_.DirType -eq [PowerShellDirectoryType]::PowerShellCurrentUser5Directory} | Sort-Object Version -Descending
-        Write-Host "Current Version: $($CurrentUser5Modules[0].Version.ToString())"
-    }
+    $highest = $arr | Sort-Object Version -Descending
+    Write-Host "Current Version: $($highest[0].Version.ToString())"
 
     Import-Module -Name SetUpBasic -Force
     Write-Host "To update your current shell session you need to reload the module with 'Import-Module -Name SetUpBasic -Force' "
@@ -180,7 +173,7 @@ function PrivateSubClean2 {
            for ($i = 1; $i -lt $Machine5Modules.Count; $i++) {
                $mod = $Machine5Modules[$i].Object
                Remove-Item -Recurse -Force -Path $mod.ModuleBase
-               Write-Host "admin rights removed"$mod.ModuleBase
+               Write-Host "admin rights removed old admin module "$mod.ModuleBase
            }
         }
         #Check if machine modules are higher than user ones and delete the user ones
@@ -192,7 +185,7 @@ function PrivateSubClean2 {
                 for ($i = 0; $i -lt $CurrentUser5Modules.Count; $i++) {
                     $mod = $CurrentUser5Modules[$i].Object
                     Remove-Item -Recurse -Force -Path $mod.ModuleBase
-                    Write-Host "admin rights removed "$mod.ModuleBase
+                    Write-Host "admin rights removed old user module "$mod.ModuleBase
                 }
 
                 $basepath = $CurrentUser5Modules[0].Object.ModuleBase.TrimEnd($CurrentUser5Modules[0].Object.Version.ToString())
@@ -200,7 +193,7 @@ function PrivateSubClean2 {
                 if ($null -eq $subItems)
                 {
                     Remove-Item -Force -Path $basepath
-                    Write-Host "admin rights removed"$basepath
+                    Write-Host "admin rights removed user path "$basepath
                 }
             }
         }
@@ -211,7 +204,7 @@ function PrivateSubClean2 {
            for ($i = 1; $i -lt $CurrentUser5Modules.Count; $i++) {
                $mod = $CurrentUser5Modules[$i].Object
                Remove-Item -Recurse -Force -Path $mod.ModuleBase
-               Write-Host "user rights removed "$mod.ModuleBase
+               Write-Host "user rights removed old user module"$mod.ModuleBase
            }
         }
      }

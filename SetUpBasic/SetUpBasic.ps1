@@ -173,7 +173,7 @@ function PrivateSubClean2 {
         if (($Machine5Modules.Count -gt 0) -and ($CurrentUser5Modules.Count -gt 0))
         {
 
-            if ($Machine5Modules[0].Version -gt $CurrentUser5Modules[0].Version)
+            if ($Machine5Modules[0].Version -ge $CurrentUser5Modules[0].Version)
             {
                 for ($i = 0; $i -lt $CurrentUser5Modules.Count; $i++) {
                     $mod = $CurrentUser5Modules[$i].Object

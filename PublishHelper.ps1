@@ -24,7 +24,9 @@ function doo {
     $title = 'NuGetApiKey'
     $msg   = 'Enter you powershell gallery NuGetApiKey:'
     $text = [Microsoft.VisualBasic.Interaction]::InputBox($msg, $title)
+    $global:progresspreference = 'SilentlyContinue'    # Subsequent calls do not display UI.
     Publish-Module -Path "$publishpath" -NuGetApiKey "$text" -Repository "PSGallery"
+    $global:progresspreference = 'Continue'            # Subsequent calls do display UI.
     Write-Host "Finished"
 }
 

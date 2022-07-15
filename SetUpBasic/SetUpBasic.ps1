@@ -87,7 +87,6 @@ class ModulFullyQualifiedName
         $this.Name = $Name
         $this.Version = $Version
         $this.Path = $Path
-        Write-Host "...diagp...$Path"
         $this.DirType = $(PowerShellPathType -Path $Path)
         $this.Object = $Object
     }

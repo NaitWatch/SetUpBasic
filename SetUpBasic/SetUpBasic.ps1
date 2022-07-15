@@ -1,3 +1,4 @@
+
 enum PowerShellDirectoryType
 {
     Unknown = 0
@@ -6,24 +7,6 @@ enum PowerShellDirectoryType
     PowerShellWindowsDirectory = 3
     PowerShell5ProgramFilesDirectory = 4
     PowerShell7ProgramFilesDirectory = 5
-}
-
-class ModulFullyQualifiedName
-{
-    [string]$Name
-    [Version]$Version
-    [string]$Path
-    [PowerShellDirectoryType]$DirType
-    [PSObject]$Object
-
-    ModulFullyQualifiedName([string]$Name,[Version]$Version,[string]$Path,[PSObject]$Object )
-    {
-        $this.Name = $Name
-        $this.Version = $Version
-        $this.Path = $Path
-        $this.DirType = PowerShellPathType -Path $Path
-        $this.Object = $Object
-    }
 }
 
 function PowerShellPathType {
@@ -90,6 +73,28 @@ function FindPowerShellDirectory {
     return $retval
 }
 
+class ModulFullyQualifiedName
+{
+    [string]$Name
+    [Version]$Version
+    [string]$Path
+    [PowerShellDirectoryType]$DirType
+    [PSObject]$Object
+
+    ModulFullyQualifiedName([string]$Name,[Version]$Version,[string]$Path,[PSObject]$Object )
+    {
+        $this.Name = $Name
+        $this.Version = $Version
+        $this.Path = $Path
+        $this.DirType = $(PowerShellPathType -Path $Path)
+        $this.Object = $Object
+    }
+}
+
+
+
+
+
 function GetUserName {
 
     [string]$CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().name
@@ -138,10 +143,10 @@ function PrivateSubUpdate {
 
     if ($(PrivateSubIsAdmin))
     {
-        Install-Module -Name SetUpBasic -Scope AllUsers -Force -Repository "PSGallery" -AllowClobber -AcceptLicense
+        Install-Module -Name SetUpBasic -Scope AllUsers -Force -Repository "PSGallery" -AllowClobber
     }
     else {
-        Install-Module -Name SetUpBasic -Scope CurrentUser -Force -Repository "PSGallery" -AllowClobber -AcceptLicense
+        Install-Module -Name SetUpBasic -Scope CurrentUser -Force -Repository "PSGallery" -AllowClobber
     }
     
     $arr = GetModuleVersions SetUpBasic 
@@ -179,7 +184,6 @@ function PrivateSubClean2 {
         #Check if machine modules are higher than user ones and delete the user ones
         if (($Machine5Modules.Count -gt 0) -and ($CurrentUser5Modules.Count -gt 0))
         {
-
             if ($Machine5Modules[0].Version -ge $CurrentUser5Modules[0].Version)
             {
                 for ($i = 0; $i -lt $CurrentUser5Modules.Count; $i++) {
@@ -209,7 +213,7 @@ function PrivateSubClean2 {
         }
      }
 
-     
+     Import-Module -Name $Name -Force
 }
 
 function PrivateSubClean{

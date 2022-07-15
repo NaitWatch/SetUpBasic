@@ -7,11 +7,13 @@ foreach ($script in  (Get-ChildItem -File -LiteralPath $PSScriptRoot -Filter *.p
 }
 
 function SubUpdate{
+
     PrivateSubUpdate
 }   
 
 function SubClean{
     #PrivateSubClean -Name "SetUpBasic"
+
     PrivateSubClean2 -Name "SetUpBasic"
 }
 

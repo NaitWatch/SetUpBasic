@@ -1,4 +1,5 @@
 
+
 enum PowerShellDirectoryType
 {
     Unknown = 0
@@ -86,6 +87,7 @@ class ModulFullyQualifiedName
         $this.Name = $Name
         $this.Version = $Version
         $this.Path = $Path
+        Write-Host "...diagp...$Path"
         $this.DirType = $(PowerShellPathType -Path $Path)
         $this.Object = $Object
     }
@@ -153,8 +155,7 @@ function PrivateSubUpdate {
 
     $highest = $arr | Sort-Object Version -Descending
     Write-Host "Current Version: $($highest[0].Version.ToString())"
-
-    Import-Module -Name SetUpBasic -Force
+    
     Write-Host "To update your current shell session you need to reload the module with 'Import-Module -Name SetUpBasic -Force' "
 }
 
@@ -213,7 +214,6 @@ function PrivateSubClean2 {
         }
      }
 
-     Import-Module -Name $Name -Force
 }
 
 function PrivateSubClean{
@@ -234,7 +234,7 @@ function PrivateSubClean{
             Uninstall-Module -name $Name -RequiredVersion $CurrentModul.Version -ErrorAction SilentlyContinue
         }
      }
-     Import-Module -Name $Name -Force
+
      Write-Host "Current: $($LatestModul) $($LatestModul.Version)"
 }
 

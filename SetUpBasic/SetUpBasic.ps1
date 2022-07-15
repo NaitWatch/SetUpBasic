@@ -143,6 +143,20 @@ function PrivateSubUpdate {
     else {
         Install-Module -Name SetUpBasic -Scope CurrentUser -Force -Repository "PSGallery" -AllowClobber -AcceptLicense
     }
+    
+    $arr = GetModuleVersions $Name 
+
+    if ($(PrivateSubIsAdmin))
+    {
+        $Machine5Modules = $arr | Where-Object {$_.DirType -eq [PowerShellDirectoryType]::PowerShell5ProgramFilesDirectory} | Sort-Object Version -Descending
+        Write-Host "Current Version: $($Machine5Modules[0].Version.ToString())"
+    }
+    else {
+        $CurrentUser5Modules = $arr | Where-Object {$_.DirType -eq [PowerShellDirectoryType]::PowerShellCurrentUser5Directory} | Sort-Object Version -Descending
+        Write-Host "Current Version: $($CurrentUser5Modules[0].Version.ToString())"
+    }
+
+    Import-Module -Name SetUpBasic -Force
     Write-Host "To update your current shell session you need to reload the module with 'Import-Module -Name SetUpBasic -Force' "
 }
 

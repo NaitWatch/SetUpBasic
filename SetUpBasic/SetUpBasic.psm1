@@ -11,7 +11,8 @@ function SubUpdate{
 }   
 
 function SubClean{
-    PrivateSubClean -Name "SetUpBasic"
+    #PrivateSubClean -Name "SetUpBasic"
+    PrivateSubClean2 -Name "SetUpBasic"
 }
 
 

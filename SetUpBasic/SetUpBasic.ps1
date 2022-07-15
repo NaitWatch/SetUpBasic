@@ -166,6 +166,7 @@ function PrivateSubClean2 {
            for ($i = 1; $i -lt $Machine5Modules.Count; $i++) {
                $mod = $Machine5Modules[$i].Object
                Remove-Item -Recurse -Force -Path $mod.ModuleBase
+               Write-Host "admin rights removed"$mod.ModuleBase
            }
         }
         #Check if machine modules are higher than user ones and delete the user ones
@@ -177,6 +178,7 @@ function PrivateSubClean2 {
                 for ($i = 0; $i -lt $CurrentUser5Modules.Count; $i++) {
                     $mod = $CurrentUser5Modules[$i].Object
                     Remove-Item -Recurse -Force -Path $mod.ModuleBase
+                    Write-Host "admin rights removed "$mod.ModuleBase
                 }
 
                 $basepath = $CurrentUser5Modules[0].Object.ModuleBase.TrimEnd($CurrentUser5Modules[0].Object.Version.ToString())
@@ -184,6 +186,7 @@ function PrivateSubClean2 {
                 if ($null -eq $subItems)
                 {
                     Remove-Item -Force -Path $basepath
+                    Write-Host "admin rights removed"$basepath
                 }
             }
         }
@@ -194,6 +197,7 @@ function PrivateSubClean2 {
            for ($i = 1; $i -lt $CurrentUser5Modules.Count; $i++) {
                $mod = $CurrentUser5Modules[$i].Object
                Remove-Item -Recurse -Force -Path $mod.ModuleBase
+               Write-Host "user rights removed "$mod.ModuleBase
            }
         }
      }
@@ -383,9 +387,7 @@ function PrivateCreateDir{
     }
 }
 
-PrivateSubClean2 "SetUpBasic"
 
-$e = ""
 
 
 #Write-Host "Hello from SetUpBasic.ps1"

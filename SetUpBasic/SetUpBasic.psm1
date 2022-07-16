@@ -17,9 +17,7 @@ function DotSourceDirectory {
 }
 
 foreach ($script in  $(DotSourceDirectory -SubDirectory "Basic")) { Write-Host "Dot sourced: $script" ; . "$script" }
-
 foreach ($script in  $(DotSourceDirectory -SubDirectory "ModuleManagement")) { Write-Host "Dot sourced: $script" ; . "$script" }
-
 foreach ($script in  $(DotSourceDirectory -SubDirectory "TaskScheduler")) { Write-Host "Dot sourced: $script" ; . "$script" }
 
 function SubUpdate{

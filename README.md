@@ -53,7 +53,3 @@ SubClean #Cleans up old version of this powershell module on the computer
 ```
 SubInstallModUpTask #Installs a scheduled task on the computer to update powershell modules
 ```
-
-
-
-

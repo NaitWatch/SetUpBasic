@@ -1,5 +1,57 @@
 $ErrorActionPreference = 'Stop'
 
+
+function DownloadPackage {
+
+    param(
+        [Parameter(Mandatory)]
+        [string]$PackageName
+    )
+
+    $PackageDirectory = "$PSScriptRoot\$PackageName"
+
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    
+    #Create a new directory if the directory for this package do not exist
+    if(!(test-path -PathType container $PackageDirectory))
+    {
+        New-Item -ItemType Directory -Path $PackageDirectory
+
+        $onlineModule = $null
+        try {
+            $onlineModule = $(Find-Module -Name $PackageName)
+        }
+        catch {
+            $onlineModule = $null
+        }
+    
+        if ($null -ne $onlineModule)
+        {
+            $result = Invoke-WebRequest -Method GET -Uri "https://www.powershellgallery.com/api/v2/package/$($onlineModule.Name)/$($onlineModule.Version)" -UseBasicParsing
+    
+            $BaseUriSegs = $result.BaseResponse.ResponseUri.Segments
+            $Name = $BaseUriSegs[$BaseUriSegs.Count-1]
+            $path = "$(Join-Path $PSScriptRoot $Name).zip"
+            
+        
+            $file = [System.IO.FileStream]::new($path, [System.IO.FileMode]::Create)
+            $file.write($result.Content, 0, $result.RawContentLength)
+            $file.close()
+        
+            Expand-Archive -Path "$path" -Destination "$PackageDirectory" -Force
+    
+            [System.IO.File]::Delete($path)
+    
+            Remove-Item -Recurse -Force "$PackageDirectory\_rels"
+            Remove-Item -Recurse -Force "$PackageDirectory\package"
+            Remove-Item -Force -LiteralPath "$PackageDirectory\[Content_Types].xml"
+            Remove-Item -Force -Path "$PackageDirectory\SetUpBasic.nuspec"
+        }
+    }
+
+ 
+}
+
 function CreateMinModule {
 
     param(
@@ -9,9 +61,9 @@ function CreateMinModule {
         [string]$Author
     )
 
-
-
     $PackageDirectory = "$PSScriptRoot\$PackageName"
+
+    DownloadPackage -PackageName "$PackageName"
 
 $lic = `
 @"
@@ -210,60 +262,55 @@ $lic = `
 
 }
 
-function DownloadPackage {
-
+function UpdateModule
+{
     param(
         [Parameter(Mandatory)]
         [string]$PackageName
     )
 
     $PackageDirectory = "$PSScriptRoot\$PackageName"
+    $PackageManifest = "$PackageDirectory\$PackageName.psd1"
 
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    
-    #Create a new directory if the directory for this package do not exist
-    if(!(test-path -PathType container $PackageDirectory))
-    {
-        New-Item -ItemType Directory -Path $PackageDirectory
+    $data = Test-ModuleManifest -Path "$PackageManifest"
 
-        $onlineModule = $null
-        try {
-            $onlineModule = $(Find-Module -Name $PackageName)
-        }
-        catch {
-            $onlineModule = $null
-        }
-    
-        if ($null -ne $onlineModule)
-        {
-            $result = Invoke-WebRequest -Method GET -Uri "https://www.powershellgallery.com/api/v2/package/$($onlineModule.Name)/$($onlineModule.Version)" -UseBasicParsing
-    
-            $BaseUriSegs = $result.BaseResponse.ResponseUri.Segments
-            $Name = $BaseUriSegs[$BaseUriSegs.Count-1]
-            $path = "$(Join-Path $PSScriptRoot $Name).zip"
-            
-        
-            $file = [System.IO.FileStream]::new($path, [System.IO.FileMode]::Create)
-            $file.write($result.Content, 0, $result.RawContentLength)
-            $file.close()
-        
-            Expand-Archive -Path "$path" -Destination "$PackageDirectory" -Force
-    
-            [System.IO.File]::Delete($path)
-    
-            Remove-Item -Recurse -Force "$PackageDirectory\_rels"
-            Remove-Item -Recurse -Force "$PackageDirectory\package"
-            Remove-Item -Force -LiteralPath "$PackageDirectory\[Content_Types].xml"
-            Remove-Item -Force -Path "$PackageDirectory\SetUpBasic.nuspec"
-        }
-    }
+    [version]$ManifestVersion = $data.Version
+    $ManifestVersionInc = "{0}.{1}.{2}.{3}" -f $ManifestVersion.Major, $ManifestVersion.Minor, $ManifestVersion.Build, ($ManifestVersion.Revision + 1)
 
- 
+    $FunctionsToExport = $($data.ExportedFunctions.Keys -join ',') -Split ','
+
+
+    New-ModuleManifest `
+    -Path "$PackageManifest" `
+    -GUID "$($data.GUID)" `
+    -Description "$($data.Description)" `
+    -Tags @($data.Tags) `
+    -LicenseUri "$($data.LicenseUri)" `
+    -ProjectUri "$($data.ProjectUri)" `
+    -FunctionsToExport @($FunctionsToExport) `
+    -ModuleVersion "$ManifestVersionInc" `
+    -RootModule "$($data.RootModule)" `
+    -Author "$($data.Author)"
+
+
+    [void][Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
+    $title = 'NuGetApiKey'
+    $msg   = 'Enter you powershell gallery NuGetApiKey:'
+    $text = [Microsoft.VisualBasic.Interaction]::InputBox($msg, $title)
+    $global:progresspreference = 'SilentlyContinue'    # Subsequent calls do not display UI.
+    Publish-Module -Path "$PackageDirectory" -NuGetApiKey "$text" -Repository "PSGallery"
+    $global:progresspreference = 'Continue'            # Subsequent calls do display UI.
+    Write-Host "Uploaded $PackageName version: $ManifestVersionInc"
+
+    
 }
 
 
-DownloadPackage -PackageName "SetUpBasic"
-#CreateMinModule -PackageName "ran" -Author "Nightwatch"
+
+#CreateMinModule -PackageName "SetUpBasic" -Author "Nightwatch"
+
+
+UpdateModule -PackageName "SetUpBasic"
 #PushGallery -PackageName "lingg" -Author "Nightwatch" -FunctionsToExport @('x') -Tags @('PSModule')
 $ss=""
 

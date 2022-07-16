@@ -23,6 +23,7 @@ foreach ($script in  $(DotSourceDirectory -SubDirectory "TaskScheduler")) { Writ
 function SubUpdate{
 
     PrivateSubUpdate
+    
 }   
 
 function SubClean{

@@ -205,3 +205,6 @@ PublishModule -PackageName "SetUpBasic"
 
 
 
+
+#Get-Module SetUpBasic | ForEach-Object { Get-Command -Module $PSItem }
+#Import-Module -FullyQualifiedName @{ ModuleName = 'SetUpBasic'; RequiredVersion = '0.0.0.164' } -Force

@@ -10,20 +10,22 @@ function DotSourceDirectory {
     [string[]] $retval = @()
 
     $SourceDirectory = "$PSScriptRoot\$SubDirectory"
+
     foreach ($script in  (Get-ChildItem -File -LiteralPath "$SourceDirectory" -Filter *.ps1)) { 
-        $retval += "$SourceDirectory\$script"
+        $retval += "$($script.Fullname)"
     }
+
     return $retval
 }
 
-foreach ($script in  $(DotSourceDirectory -SubDirectory "Basic")) { Write-Host "Dot sourced: $script" ; . "$script" }
+foreach ($script in  $(DotSourceDirectory -SubDirectory "Basic")){ Write-Host "Dot sourced: $script" ; . "$script" }
 foreach ($script in  $(DotSourceDirectory -SubDirectory "ModuleManagement")) { Write-Host "Dot sourced: $script" ; . "$script" }
 foreach ($script in  $(DotSourceDirectory -SubDirectory "TaskScheduler")) { Write-Host "Dot sourced: $script" ; . "$script" }
 
 function SubUpdate{
 
     PrivateSubUpdate
-    
+
 }   
 
 function SubClean{

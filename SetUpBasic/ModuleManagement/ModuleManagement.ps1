@@ -155,7 +155,7 @@ function PrivateSubUpdate {
     $highest = $arr | Sort-Object Version -Descending
     Write-Host "Current Version: $($highest[0].Version.ToString())"
     
-    Write-Host "To update your current shell session you need to reload the module with 'Import-Module -Name SetUpBasic -Force' "
+    #Write-Host "To update your current shell session you need to reload the module with 'Import-Module -Name SetUpBasic -Force' "
 }
 
 function PrivateSubClean2 {

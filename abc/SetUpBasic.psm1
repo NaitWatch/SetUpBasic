@@ -6,21 +6,21 @@ function DotSourceDirectory {
         [Parameter(Mandatory)]
         [string]$SubDirectory
     )
-
-    [string[]] $retval = @()
+    
+    [string[]] $retval
 
     $SourceDirectory = "$PSScriptRoot\$SubDirectory"
     foreach ($script in  (Get-ChildItem -File -LiteralPath "$SourceDirectory" -Filter *.ps1)) { 
+        #. "$SourceDirectory\$script"
         $retval += "$SourceDirectory\$script"
     }
     return $retval
 }
 
-foreach ($script in  $(DotSourceDirectory -SubDirectory "Basic")) { Write-Host "Dot sourced: $script" ; . "$script" }
-
-foreach ($script in  $(DotSourceDirectory -SubDirectory "ModuleManagement")) { Write-Host "Dot sourced: $script" ; . "$script" }
-
-foreach ($script in  $(DotSourceDirectory -SubDirectory "TaskScheduler")) { Write-Host "Dot sourced: $script" ; . "$script" }
+foreach ($script in  $(DotSourceDirectory -SubDirectory "soso")) {
+    Write-Host "dot sourced file $script"
+     . "$script"
+}
 
 function SubUpdate{
 

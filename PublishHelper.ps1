@@ -1,34 +1,26 @@
 
-function doo {
-    
-    $publishpath = "$PSScriptRoot\SetUpBasic"
+$latestOnlineVersion = $(Find-Module -Name SetUpBasic).Version
+Write-Host "Your oldest online version: $latestOnlineVersion"
+$v = [version]$latestOnlineVersion
+$newVersion = "{0}.{1}.{2}.{3}" -f $v.Major, $v.Minor, $v.Build, ($v.Revision + 1)
+Write-Host "Your published version will be: $newVersion"
 
-    $file = "$publishpath\SetUpBasic.psd1"
-    $fileVersion = Get-Content $file -Raw
-    
-    $RegExPattern = [regex]::new('ModuleVersion(.*?)=(.*?)''(.*?)''')
-    [System.Text.RegularExpressions.MatchCollection]$matches = $RegExPattern.Matches($fileVersion)
-    $fullmatch = [string]$matches[0].Groups[0].Value
-    $version = [string]$matches[0].Groups[3].Value
-    Write-Host "Current Version: $fullmatch"
-    $v = [version]$version
-    $newVersion = "{0}.{1}.{2}.{3}" -f $v.Major, $v.Minor, $v.Build, ($v.Revision + 1)
-    
-    $fileVersion = $fileVersion.replace($matches[0].Groups[0].Value,"ModuleVersion = '$newVersion'")
-    $fileVersion | Out-File "$publishpath\SetUpBasic.psd1"
-    Write-Host "Your published version will be: $newVersion"
-    Write-Host "Commit of version : $newVersion"
-    
-    
-    [void][Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
-    $title = 'NuGetApiKey'
-    $msg   = 'Enter you powershell gallery NuGetApiKey:'
-    $text = [Microsoft.VisualBasic.Interaction]::InputBox($msg, $title)
-    $global:progresspreference = 'SilentlyContinue'    # Subsequent calls do not display UI.
-    Publish-Module -Path "$publishpath" -NuGetApiKey "$text" -Repository "PSGallery"
-    $global:progresspreference = 'Continue'            # Subsequent calls do display UI.
-    Write-Host "Finished"
-}
+New-ModuleManifest `
+-Path "$PSScriptRoot\SetUpBasic\SetUpBasic.psd1" `
+-GUID "a8f1f122-a560-4d34-9390-0193cd370f33" `
+-Description "Powershell module for basic windows os configuration, maintenance" `
+-Tags @("windows","configuration","maintenance") `
+-LicenseUri "https://github.com/NaitWatch/SetUpBasic/blob/main/LICENSE" `
+-ProjectUri "https://github.com/NaitWatch/SetUpBasic" `
+-FunctionsToExport @('SubUpdate','SubClean','SubIsAdmin','SubFetchLink','SubInstallRestartTask','SubInstallRestartTask','SubInstallModUpTask') `
+-ModuleVersion "$newVersion"
 
+[void][Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
+$title = 'NuGetApiKey'
+$msg   = 'Enter you powershell gallery NuGetApiKey:'
+$text = [Microsoft.VisualBasic.Interaction]::InputBox($msg, $title)
+$global:progresspreference = 'SilentlyContinue'    # Subsequent calls do not display UI.
+Publish-Module -Name "SetUpBasic" -Path "$PSScriptRoot\SetUpBasic"  -NuGetApiKey "$text" -Repository "PSGallery"
+$global:progresspreference = 'Continue'            # Subsequent calls do display UI.
+Write-Host "Finished"
 
-doo

@@ -21,7 +21,7 @@ Install-Module -Name SetupBasic -Scope CurrentUser -Force
 
 ### Update
 ```
-SubUpdate ; SubClean ; Import-Module -Name SetUpBasic -Force
+SubUpdate ; SubClean
 ```
 
 

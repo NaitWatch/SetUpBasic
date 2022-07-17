@@ -121,24 +121,24 @@ function Out-Private$($DefaultCommandPrefix)Hello {
     #Create a new directory if the directory for this package do not exist
     if(!(test-path -PathType container $PackageDirectory))
     {
-        New-Item -ItemType Directory -Path $PackageDirectory
+        New-Item -ItemType Directory -Path $PackageDirectory  | Out-Null
 
             #Create a empty root module if no rootmodule exists
         if (!(Test-Path "$PackageDirectory\$PackageName.psm1"))
         {
-            New-Item -path "$PackageDirectory" -name "$PackageName.psm1" -type "file" -value "$psm1RootModule"
+            New-Item -path "$PackageDirectory" -name "$PackageName.psm1" -type "file" -value "$psm1RootModule"  | Out-Null
         }
 
         #Create a empty root module if no rootmodule exists
         if (!(Test-Path "$PackageDirectory\$PackageName.ps1"))
         {
-            New-Item -path "$PackageDirectory" -name "$PackageName.ps1" -type "file" -value "$ps1RootModule"
+            New-Item -path "$PackageDirectory" -name "$PackageName.ps1" -type "file" -value "$ps1RootModule"  | Out-Null
         }
 
         #Create a default license 
         if (!(Test-Path "$PackageDirectory\LICENSE.txt"))
         {
-            New-Item -path "$PackageDirectory" -name "LICENSE.txt" -type "file" -value "$lic"
+            New-Item -path "$PackageDirectory" -name "LICENSE.txt" -type "file" -value "$lic"  | Out-Null
         }
 
         if (!(Test-Path "$PackageDirectory\$PackageName.psd1"))
@@ -160,10 +160,12 @@ function Out-Private$($DefaultCommandPrefix)Hello {
             (Get-Content -path "$PackageDirectory\$PackageName.psd1") | Set-Content -Encoding default -Path "$PackageDirectory\$PackageName.psd1"
             
         }
-        Write-Host "Default files have been created in $PackageDirectory."
-        Write-Host "You can import your module in the current session. -> Import-Module "".\$PackageName\$PackageName.psd1"" -Verbose -Force."
-        Write-Host "If you want to check the imported commands in the current session. -> Get-Module $PackageName | ForEach-Object { Get-Command -Module `$PSItem }"
-        
+
+        Write-Host "Default files have been created in $PackageDirectory." -ForegroundColor black -BackgroundColor white
+        Write-Host "You can import your module in the current session. -> " -NoNewline
+        Write-Host "Import-Module "".\$PackageName\$PackageName.psd1"" -Verbose -Force" -ForegroundColor Yello
+        Write-Host "If you want to check the imported commands in the current session. -> " -NoNewline
+        Write-Host "Get-Module $PackageName | ForEach-Object { Get-Command -Module `$PSItem }" -ForegroundColor Yello
         Exit 0
     }
 
@@ -219,11 +221,5 @@ function PublishModule
 }
 
 
-CreateOrContinueModule -PackageName "SetUpBasicx" -Author "Nightwatch" -DefaultCommandPrefix "Sub" -NoDownload
-PublishModule -PackageName "SetUpBasicx"
-
-#CreateOrContinueModule -PackageName "dottest.test" -Author "Nightwatch"
-#PublishModule -PackageName "dottest.test"
-
-#Get-Module SetUpBasic | ForEach-Object { Get-Command -Module $PSItem }
-#Import-Module -FullyQualifiedName @{ ModuleName = 'SetUpBasic'; RequiredVersion = '0.0.0.164' } -Force
+CreateOrContinueModule -PackageName "MyModule" -Author "MyName" -DefaultCommandPrefix "My" -NoDownload
+PublishModule -PackageName "MyModule"

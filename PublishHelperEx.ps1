@@ -60,12 +60,18 @@ function CreateOrContinueModule {
         [Parameter(Mandatory)]
         [string]$PackageName,
         [Parameter(Mandatory)]
-        [string]$Author
+        [string]$Author,
+        [Parameter(Mandatory)]
+        [string]$DefaultCommandPrefix,
+        [switch]$NoDownload
     )
 
     $PackageDirectory = "$PSScriptRoot\$PackageName"
 
-    RestoreModule -PackageName "$PackageName"
+    if(-Not $NoDownload) {
+        RestoreModule -PackageName "$PackageName"
+    }
+    
 
 $lic = `
 @"
@@ -97,15 +103,17 @@ $psm1RootModule = `
 
 . "`$PSScriptRoot\$PackageName.ps1"
 
-function Stub-$PackageName {
-    PrivateStub-$PackageName
+function Out-$($DefaultCommandPrefix)Hello {
+    Out-Private$($DefaultCommandPrefix)Hello
+    Write-Host "Use Get-Verb prefixes - your prefix + command e.g. Out-SubHello"
+    Write-Host "Don't forget to list newly added function in the module manifest .psd1 file, section FunctionsToExport= "
 }
 
 "@
 
 $ps1RootModule = `
 @"
-function PrivateStub-$PackageName {
+function Out-Private$($DefaultCommandPrefix)Hello {
     Write-Host ("Hello world form: {0} ." -f `$MyInvocation.MyCommand)
 }
 "@
@@ -144,15 +152,18 @@ function PrivateStub-$PackageName {
             -Tags @('alpha',$PackageName) `
             -LicenseUri "https://www.powershellgallery.com/packages/$PackageName/0.0.0.0/Content/LICENSE.txt" `
             -ProjectUri "https://www.powershellgallery.com/packages/$PackageName" `
-            -FunctionsToExport @("Stub-$PackageName") `
+            -FunctionsToExport @("Out-$($DefaultCommandPrefix)Hello") `
             -ModuleVersion "0.0.0.0" `
             -RootModule "$PackageName.psm1" `
             -Author "$Author"
 
-            (Get-Content -path "$PackageManifest") | Set-Content -Encoding default -Path "$PackageManifest"
+            (Get-Content -path "$PackageDirectory\$PackageName.psd1") | Set-Content -Encoding default -Path "$PackageDirectory\$PackageName.psd1"
             
         }
         Write-Host "Default files have been created in $PackageDirectory."
+        Write-Host "You can import your module in the current session. -> Import-Module "".\$PackageName\$PackageName.psd1"" -Verbose -Force."
+        Write-Host "If you want to check the imported commands in the current session. -> Get-Module $PackageName | ForEach-Object { Get-Command -Module `$PSItem }"
+        
         Exit 0
     }
 
@@ -178,6 +189,7 @@ function PublishModule
     
     [string[]]$Tags = ($data.Tags  | Group-Object| Select-Object -ExpandProperty Name)
 
+ 
     New-ModuleManifest `
     -Path "$PackageManifest" `
     -GUID "$($data.GUID)" `
@@ -188,7 +200,8 @@ function PublishModule
     -FunctionsToExport @($FunctionsToExport) `
     -ModuleVersion "$ManifestVersionInc" `
     -RootModule "$($data.RootModule)" `
-    -Author "$($data.Author)"
+    -Author "$($data.Author)" 
+    # -RequiredModules "$($data.RequiredModules)"
 
     (Get-Content -path "$PackageManifest") | Set-Content -Encoding default -Path "$PackageManifest"
 
@@ -206,14 +219,11 @@ function PublishModule
 }
 
 
-CreateOrContinueModule -PackageName "SetUpBasic" -Author "Nightwatch"
-PublishModule -PackageName "SetUpBasic"
+CreateOrContinueModule -PackageName "SetUpBasicx" -Author "Nightwatch" -DefaultCommandPrefix "Sub" -NoDownload
+PublishModule -PackageName "SetUpBasicx"
 
 #CreateOrContinueModule -PackageName "dottest.test" -Author "Nightwatch"
 #PublishModule -PackageName "dottest.test"
-
-
-
 
 #Get-Module SetUpBasic | ForEach-Object { Get-Command -Module $PSItem }
 #Import-Module -FullyQualifiedName @{ ModuleName = 'SetUpBasic'; RequiredVersion = '0.0.0.164' } -Force

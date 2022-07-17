@@ -46,6 +46,7 @@ function RestoreModule {
             Remove-Item -Force -LiteralPath "$PackageDirectory\[Content_Types].xml"
             Remove-Item -Force -Path "$PackageDirectory\$PackageName.nuspec"
 
+            Write-Host "Default files, latst version have been downloaded to $PackageDirectory."
             Exit 0
         }
     }
@@ -96,16 +97,16 @@ $psm1RootModule = `
 
 . "`$PSScriptRoot\$PackageName.ps1"
 
-function Stub {
-    PrivateStub
+function Stub-$PackageName {
+    PrivateStub-$PackageName
 }
 
 "@
 
 $ps1RootModule = `
 @"
-function PrivateStub {
-    Write-Host "Stub"
+function PrivateStub-$PackageName {
+    Write-Host ("Hello world form: {0} ." -f `$MyInvocation.MyCommand)
 }
 "@
 
@@ -141,14 +142,17 @@ function PrivateStub {
             -GUID "$guid" `
             -Description "Powershell module $PackageName. This module is under construction and just uploaded for testing purposes." `
             -Tags @('alpha',$PackageName) `
-            -LicenseUri "https://www.powershellgallery.com/packages/$PackageName/0.0.0.1/Content/LICENSE.txt" `
+            -LicenseUri "https://www.powershellgallery.com/packages/$PackageName/0.0.0.0/Content/LICENSE.txt" `
             -ProjectUri "https://www.powershellgallery.com/packages/$PackageName" `
-            -FunctionsToExport @('Stub') `
-            -ModuleVersion "0.0.0.1" `
+            -FunctionsToExport @("Stub-$PackageName") `
+            -ModuleVersion "0.0.0.0" `
             -RootModule "$PackageName.psm1" `
             -Author "$Author"
-        }
 
+            (Get-Content -path "$PackageManifest") | Set-Content -Encoding default -Path "$PackageManifest"
+            
+        }
+        Write-Host "Default files have been created in $PackageDirectory."
         Exit 0
     }
 
@@ -186,6 +190,8 @@ function PublishModule
     -RootModule "$($data.RootModule)" `
     -Author "$($data.Author)"
 
+    (Get-Content -path "$PackageManifest") | Set-Content -Encoding default -Path "$PackageManifest"
+
 
     [void][Reflection.Assembly]::LoadWithPartialName('Microsoft.VisualBasic')
     $title = 'NuGetApiKey'
@@ -202,6 +208,9 @@ function PublishModule
 
 CreateOrContinueModule -PackageName "SetUpBasic" -Author "Nightwatch"
 PublishModule -PackageName "SetUpBasic"
+
+#CreateOrContinueModule -PackageName "dottest.test" -Author "Nightwatch"
+#PublishModule -PackageName "dottest.test"
 
 
 

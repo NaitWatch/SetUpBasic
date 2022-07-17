@@ -221,5 +221,5 @@ function PublishModule
 }
 
 
-CreateOrContinueModule -PackageName "MyModule" -Author "MyName" -DefaultCommandPrefix "My" -NoDownload
-PublishModule -PackageName "MyModule"
+CreateOrContinueModule -PackageName "SetUpBasic" -Author "Naitwatch" -DefaultCommandPrefix "Sub" -NoDownload
+PublishModule -PackageName "SetUpBasic"

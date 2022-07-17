@@ -1,3 +1,7 @@
+<#
+    SetUpBasic root module
+#>
+
 function DotSourceDirectory {
     
     [OutputType([string[]])]
@@ -18,9 +22,9 @@ function DotSourceDirectory {
     return $retval
 }
 
-foreach ($script in  $(DotSourceDirectory -SubDirectory "Basic")){ Write-Host "Dot sourced: $script" ; . "$script" }
-foreach ($script in  $(DotSourceDirectory -SubDirectory "ModuleManagement")) { Write-Host "Dot sourced: $script" ; . "$script" }
-foreach ($script in  $(DotSourceDirectory -SubDirectory "TaskScheduler")) { Write-Host "Dot sourced: $script" ; . "$script" }
+foreach ($script in  $(DotSourceDirectory -SubDirectory "Basic")){ <# Write-Host "Dot sourced: $script" ; #>  . "$script" }
+foreach ($script in  $(DotSourceDirectory -SubDirectory "ModuleManagement")) { <# Write-Host "Dot sourced: $script" ; #>  . "$script" }
+foreach ($script in  $(DotSourceDirectory -SubDirectory "TaskScheduler")) { <# Write-Host "Dot sourced: $script" ; #>  . "$script" }
 
 function SubUpdate{
 
@@ -29,8 +33,6 @@ function SubUpdate{
 }   
 
 function SubClean{
-    #PrivateSubClean -Name "SetUpBasic"
-
     PrivateSubClean2 -Name "SetUpBasic"
 }
 

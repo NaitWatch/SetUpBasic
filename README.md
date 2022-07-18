@@ -5,12 +5,6 @@ You can find the current published Module version here.
 
 https://www.powershellgallery.com/packages/SetUpBasic/
 
-Take a look at "PublishHelperEx.ps1" this can create a powershell modul template. If you have a powershell gallery account and the corresponding key you can create a Module with seconds and upload it to the PSGallery. I will release it as SetUpBasic submodule later on.
-
-```
-CreateOrContinueModule -PackageName "MyModule" -Author "MyName" -DefaultCommandPrefix "My" -NoDownload
-PublishModule -PackageName "MyModule"
-```
 
 ## To trust the PowershellGallery
 
@@ -21,17 +15,24 @@ Register-PSRepository -Default 2>$null ; Set-PSRepository -Name "PSGallery" -Ins
 
 ## Installation:
 I recommend adding `-Scope AllUsers` the module than will installed C:\Program Files\WindowsPowerShell\Modules instead of a user specific directory. This of course required Administrator rights.
+The Module SetupBasic will hold and install dependencys of the other SubModules
 
-#### Install
+### Install (Main Module)
 ```
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force ;
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 ;
 Install-Module -Name SetupBasic -Scope CurrentUser -Force
 ```
 
-#### Update
+### Update
 ```
 SubUpdate ; SubClean
+```
+
+### List of SubModules
+```
+Install-Module -Name SetUpBasic.Publish -Scope CurrentUser -Force
+Install-Module -Name SetUpBasic.Template -Scope CurrentUser -Force
 ```
 
 
@@ -39,15 +40,30 @@ SubUpdate ; SubClean
 
 List the currently installed modules versions on your computer.
 ```
-Get-Module -ListAvailable SetupBasic | Format-List
+Get-Module -ListAvailable SetupBasic*
 ```
 
 Displays the latest online version available.
 ```
-Find-Module -Name SetupBasic
+Find-Module -Name SetupBasic*
 ```
 
 Displays function/commands loaded in your current session.
 ```
-Get-Module SetupBasic | ForEach-Object { Get-Command -Module $PSItem }
+Get-Module SetupBasic* | ForEach-Object { Get-Command -Module $PSItem }
+```
+
+## Alpha commands:
+
+### Publish a Module in under a minute.
+(of course you need a microsoft account, and a PSGallery NugetApiKey https://www.powershellgallery.com/account/apikeys)
+
+Creates a directory and places powershell script module standard files in it, ready to publish it to the powershell gallery.
+```
+Template-SubNewPSModule -Path "C:\temp" -PackageName "MyModule" -Author "Me" -VerbPrefix "Out" -ModulePrefix "MyMod"
+```
+
+Publish the powershell script module to the powershell gallery.
+```
+Publish-SubPSModule -Path "C:\temp" -Packagename "MyModule"
 ```

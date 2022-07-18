@@ -12,7 +12,7 @@
 RootModule = 'SetUpBasic.Template.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.1'
+ModuleVersion = '0.0.0.4'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -98,7 +98,7 @@ PrivateData = @{
         Tags = 'alpha', 'SetUpBasic.Template'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Template/0.0.0.1/Content/LICENSE.txt'
+        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Template/0.0.0.4/Content/LICENSE.txt'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Template'

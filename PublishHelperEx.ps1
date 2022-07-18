@@ -222,5 +222,8 @@ function PublishModule
 
 
 #New-SubTemplatePSModule -PackageName "SetUpBasic.Publish" -Author "Naitwatch" -CommandPrefix "SubPublish"
-Template-SubNewPSModule -PackageName "SetUpBasic.Template" -Author "Naitwatch" -CommandPrefix "Sub"
-#PublishModule -PackageName "SetUpBasic.Template"
+Template-SubNewPSModule -PackageName "SetUpBasic.Publish" -VerbPrefix "Publish" -ModulePrefix "Sub" -Author "Naitwatch" 
+Template-SubNewPSModule -PackageName "SetUpBasic.Template" -VerbPrefix "Template" -ModulePrefix "Sub" -Author "Naitwatch" 
+
+PublishModule -PackageName "SetUpBasic.Template"
+PublishModule -PackageName "SetUpBasic.Publish"

@@ -2,6 +2,7 @@
 . "$PSScriptRoot\SetUpBasic.Template.ps1"
 
 function Template-SubNewPSModule {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseApprovedVerbs", "")]
     
     param(
         [string]$Path,
@@ -15,5 +16,5 @@ function Template-SubNewPSModule {
         [string]$ModulePrefix
     )
     
-    Private-Template-SubNewPSModule -Path "$Path" "$PackageName" -VerbPrefix "$VerbPrefix" -ModulePrefix "$ModulePrefix" -Author "$Author" 
+    Private-Template-SubNewPSModule -Path "$Path" -PackageName "$PackageName" -VerbPrefix "$VerbPrefix" -ModulePrefix "$ModulePrefix" -Author "$Author" 
 }

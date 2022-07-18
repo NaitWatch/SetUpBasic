@@ -1,7 +1,8 @@
 $ErrorActionPreference = 'Stop'
 
-function Private-Template-SubNewPSModule {
 
+function Private-Template-SubNewPSModule {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseApprovedVerbs", "")]
     param(
         [string]$Path,
         [Parameter(Mandatory)]

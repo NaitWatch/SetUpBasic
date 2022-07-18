@@ -221,5 +221,6 @@ function PublishModule
 }
 
 
-CreateOrContinueModule -PackageName "SetUpBasic.TemplateGenerator" -Author "Naitwatch" -DefaultCommandPrefix "SubTemplate" -NoDownload
-PublishModule -PackageName "SetUpBasic.TemplateGenerator"
+#New-SubTemplatePSModule -PackageName "SetUpBasic.Publish" -Author "Naitwatch" -CommandPrefix "SubPublish"
+Template-SubNewPSModule -PackageName "SetUpBasic.Template" -Author "Naitwatch" -CommandPrefix "Sub"
+#PublishModule -PackageName "SetUpBasic.Template"

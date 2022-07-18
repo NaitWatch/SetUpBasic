@@ -1,7 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-
-function New-SubPrivateTemplatePSModule {
+function Private-Template-SubNewPSModule {
 
     param(
         [string]$Path,
@@ -10,7 +9,9 @@ function New-SubPrivateTemplatePSModule {
         [Parameter(Mandatory)]
         [string]$Author,
         [Parameter(Mandatory)]
-        [string]$CommandPrefix
+        [string]$VerbPrefix,
+        [Parameter(Mandatory)]
+        [string]$ModulePrefix
     )
 
     if ((-not $PSBoundParameters.ContainsKey('Path')) -or ($Path -eq ""))
@@ -62,8 +63,8 @@ $psm1RootModule = `
 
 . "`$PSScriptRoot\$PackageName.ps1"
 
-function Out-$($CommandPrefix)Hello {
-    Out-Private$($CommandPrefix)Hello
+function $($VerbPrefix)-$($ModulePrefix)ReplaceMe {
+    Private-$($VerbPrefix)-$($ModulePrefix)ReplaceMe
     Write-Host "Use Get-Verb prefixes - your prefix + command e.g. Out-SubHello"
     Write-Host "Don't forget to list newly added function in the module manifest .psd1 file, section FunctionsToExport= "
 }
@@ -72,7 +73,7 @@ function Out-$($CommandPrefix)Hello {
 
 $ps1RootModule = `
 @"
-function Out-Private$($CommandPrefix)Hello {
+function Private-$($VerbPrefix)-$($ModulePrefix)ReplaceMe {
     Write-Host ("Hello world form: {0} ." -f `$MyInvocation.MyCommand)
 }
 "@
@@ -111,7 +112,7 @@ function Out-Private$($CommandPrefix)Hello {
             -Tags @('alpha',$PackageName) `
             -LicenseUri "https://www.powershellgallery.com/packages/$PackageName/0.0.0.0/Content/LICENSE.txt" `
             -ProjectUri "https://www.powershellgallery.com/packages/$PackageName" `
-            -FunctionsToExport @("Out-$($CommandPrefix)Hello") `
+            -FunctionsToExport @("$($VerbPrefix)-$($ModulePrefix)ReplaceMe") `
             -ModuleVersion "0.0.0.0" `
             -RootModule "$PackageName.psm1" `
             -Author "$Author"
@@ -125,7 +126,5 @@ function Out-Private$($CommandPrefix)Hello {
         Write-Host "Import-Module ""$PackageDirectory\$PackageName.psd1"" -Verbose -Force" -ForegroundColor Yello
         Write-Host "If you want to check the imported commands in the current session. -> " -NoNewline
         Write-Host "Get-Module $PackageName | ForEach-Object { Get-Command -Module `$PSItem }" -ForegroundColor Yello
-   
     }
-
 }

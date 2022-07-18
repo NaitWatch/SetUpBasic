@@ -24,6 +24,7 @@ I recommend adding `-Scope AllUsers` the module than will installed C:\Program F
 
 #### Install
 ```
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force ;
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 ;
 Install-Module -Name SetupBasic -Scope CurrentUser -Force
 ```

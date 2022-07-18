@@ -221,10 +221,17 @@ function PublishModule
 }
 
 
-#New-SubTemplatePSModule -PackageName "SetUpBasic.Publish" -Author "Naitwatch" -CommandPrefix "SubPublish"
-Template-SubNewPSModule -PackageName "SetUpBasic.Publish" -VerbPrefix "Publish" -ModulePrefix "Sub" -Author "Naitwatch" 
-Template-SubNewPSModule -PackageName "SetUpBasic.Template" -VerbPrefix "Template" -ModulePrefix "Sub" -Author "Naitwatch" 
 
-Publish-SubPSModule -PackageName "SetUpBasic.Template"
-Publish-SubPSModule -PackageName "SetUpBasic.Publish"
+#Template-SubNewPSModule -PackageName "SetUpBasic.Publish" -VerbPrefix "Publish" -ModulePrefix "Sub" -Author "Naitwatch" 
+#Template-SubNewPSModule -PackageName "SetUpBasic.Template" -VerbPrefix "Template" -ModulePrefix "Sub" -Author "Naitwatch" 
+
+#Publish-SubPSModule -PackageName "SetUpBasic.Template"
+#Publish-SubPSModule -PackageName "SetUpBasic.Publish"
 Publish-SubPSModule -PackageName "SetUpBasic"
+
+<#
+RequiredModules =@(
+    @{ModuleName="SetUpBasic.Publish"; ModuleVersion="0.0.0.1"; GUID="cfc45206-1e49-459d-a8ad-5b571ef94857"},
+    @{ModuleName="SetUpBasic.Template"; ModuleVersion="0.0.0.1"; GUID="cfc45206-1e49-459d-a8ad-5b571ef94857"}
+)
+#>

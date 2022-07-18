@@ -12,7 +12,7 @@
 RootModule = 'SetUpBasic.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.176'
+ModuleVersion = '0.0.0.179'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -51,7 +51,8 @@ Description = 'Powershell module for basic windows os configuration, maintenance
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+RequiredModules = @('SetUpBasic.Publish', 
+               'SetUpBasic.Template')
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -99,7 +100,7 @@ PrivateData = @{
         Tags = 'configuration', 'maintenance', 'windows'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic/0.0.0.176/Content/LICENSE.txt'
+        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic/0.0.0.179/Content/LICENSE.txt'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/NaitWatch/SetUpBasic'

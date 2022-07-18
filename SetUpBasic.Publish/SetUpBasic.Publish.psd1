@@ -12,7 +12,7 @@
 RootModule = 'SetUpBasic.Publish.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.3'
+ModuleVersion = '0.0.0.14'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -52,11 +52,6 @@ Description = 'Powershell module SetUpBasic.Publish. This module is under constr
 
 # Modules that must be imported into the global environment prior to importing this module
 # RequiredModules = @()
-
-RequiredModules =@(
-    @{ModuleName="SetUpBasic.Publish"; ModuleVersion="0.0.0.1"; GUID="cfc45206-1e49-459d-a8ad-5b571ef94857"},
-    @{ModuleName="SetUpBasic.Template"; ModuleVersion="0.0.0.1"; GUID="cfc45206-1e49-459d-a8ad-5b571ef94857"}
-)
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -103,7 +98,7 @@ PrivateData = @{
         Tags = 'alpha', 'SetUpBasic.Publish'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Publish/0.0.0.3/Content/LICENSE.txt'
+        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Publish/0.0.0.14/Content/LICENSE.txt'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Publish'

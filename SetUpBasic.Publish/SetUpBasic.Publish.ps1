@@ -1,18 +1,3 @@
-
-class RequiredMod {
-    
-    [string]$ModuleName
-    [string]$ModuleVersion
-    [string]$GUID
-
-    RequiredMod([string]$ModuleName,[string]$ModuleVersion,[string]$GUID)
-    {
-        $this.ModuleName = $ModuleName
-        $this.ModuleVersion = $ModuleVersion
-        $this.GUID = $GUID
-    }
-}
-
 function Publish-PrivateSubPSModule
 {
     param(
@@ -29,12 +14,11 @@ function Publish-PrivateSubPSModule
     if (-not (Test-Path -LiteralPath "$Path" -IsValid))
     {
         $Path = Get-Location
-        Write-Warning "Invalid path detected. Path is now current directory. $Path"
     }
 
     [string[]] $retval = @()
 
-    foreach ($script in  (Get-ChildItem -File -LiteralPath "$Path" -Filter "*.psd1")) { 
+    foreach ($script in  (Get-ChildItem -File -LiteralPath "$Path\$PackageName" -Filter "*.psd1")) { 
         $retval += "$($script.Fullname)"
     }
 
@@ -50,7 +34,7 @@ function Publish-PrivateSubPSModule
             return $null
         }
     }
-
+    
     $data = Test-ModuleManifest -Path "$PackageManifest"
 
     [version]$ManifestVersion = $data.Version
@@ -67,7 +51,6 @@ function Publish-PrivateSubPSModule
         if (($null -eq $item.Version) -and ($item.Guid -eq "00000000-0000-0000-0000-000000000000"))
         {                                                   
             $add = [string]$item.Name
-                  
         }
         elseif (($null -ne $item.Version) -and ($item.Guid -eq "00000000-0000-0000-0000-000000000000")) {
             $add = @{
@@ -76,18 +59,13 @@ function Publish-PrivateSubPSModule
                 }
         }
         else {
-            
             $add = @{
                 ModuleName = $item.Name
                 ModuleVersion = $item.Version;
                 GUID = $item.Guid
                 }
-            
         }
-
-
          $RequiredMod += $add
-
     }
 
 
@@ -120,11 +98,3 @@ function Publish-PrivateSubPSModule
 
 }
 
-Publish-PrivateSubPSModule -Path "C:\base\github.com\NaitWatch\SetUpBasic\SetUpBasic" -PackageName "SetUpBasic"
-
-<#
-RequiredModules =@(
-    @{ModuleName="SetUpBasic.Publish"; ModuleVersion="0.0.0.1"; GUID="cfc45206-1e49-459d-a8ad-5b571ef94857"},
-    @{ModuleName="SetUpBasic.Template"; ModuleVersion="0.0.0.1"; GUID="cfc45206-1e49-459d-a8ad-5b571ef94857"}
-)
-#>

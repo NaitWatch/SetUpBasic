@@ -12,7 +12,7 @@
 RootModule = 'SetUpBasic.Update.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.3'
+ModuleVersion = '0.0.0.9'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -98,7 +98,7 @@ PrivateData = @{
         Tags = 'alpha', 'SetUpBasic.Update'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Update/0.0.0.3/Content/LICENSE.txt'
+        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Update/0.0.0.9/Content/LICENSE.txt'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://www.powershellgallery.com/packages/SetUpBasic.Update'

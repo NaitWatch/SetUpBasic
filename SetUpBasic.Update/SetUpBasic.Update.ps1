@@ -6,7 +6,7 @@ function Private-Update-SubModule {
         [string]$Name
     )
 
-    if ((-not $PSBoundParameters.ContainsKey('Name')) -or ($Path -eq ""))
+    if ((-not $PSBoundParameters.ContainsKey('Name')) -or ($Name -eq ""))
     {
         $Name = "SetupBasic.Update"
     }
@@ -51,18 +51,19 @@ function Private-Update-SubModule {
             Install-Module -Name "$Name" -Scope CurrentUser -Force -Repository "PSGallery" -AllowClobber -RequiredVersion "$latestOnlineVersion" 3>$null
         }
 
+        <#
         #Check if module is loaded and remove
         $loaded = Get-Module "$Name" | ForEach-Object { Get-Command -Module $PSItem } | Group-Object -Property Version | Select-Object -Property Name
         foreach($item in $loaded)
         {
-            Remove-Module -FullyQualifiedName @{ModuleName = "$Name"; RequiredVersion = "$($item.Name)"}
+            Remove-Module -FullyQualifiedName @{ModuleName = "$Name"; RequiredVersion = "$($item.Name)"} -Force
             $loaded = Get-Module "$Name" | ForEach-Object { Get-Command -Module $PSItem } | Group-Object -Property Version | Select-Object -Property Name
         }
         #Import the latest version
         #Import-Module -FullyQualifiedName @{ModuleName = "$Name"; RequiredVersion = "$latestOnlineVersion"} -Force
+        #>
+        
     }
 }
-
-
 
 

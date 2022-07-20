@@ -8,7 +8,7 @@ function Private-Update-SubModule {
 
     if ((-not $PSBoundParameters.ContainsKey('Name')) -or ($Path -eq ""))
     {
-        $Name = "SetupBasic"
+        $Name = "SetupBasic.Update"
     }
     
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12

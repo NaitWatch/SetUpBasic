@@ -28,7 +28,7 @@ foreach ($script in  $(DotSourceDirectory -SubDirectory "TaskScheduler")) { <# W
 
 function SubUpdate{
 
-    PrivateSubUpdate
+    Update-SubModule -Name "SetUpBasic"
 
 }   
 

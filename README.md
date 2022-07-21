@@ -33,6 +33,7 @@ SubUpdate ; SubClean
 ```
 Install-Module -Name SetUpBasic.Publish -Scope CurrentUser -Force
 Install-Module -Name SetUpBasic.Template -Scope CurrentUser -Force
+Install-Module -Name SetUpBasic.Update -Scope CurrentUser -Force
 ```
 
 
@@ -60,10 +61,15 @@ Get-Module SetupBasic* | ForEach-Object { Get-Command -Module $PSItem }
 
 Creates a directory and places powershell script module standard files in it, ready to publish it to the powershell gallery.
 ```
-Template-SubNewPSModule -Path "C:\temp" -PackageName "MyModule" -Author "Me" -VerbPrefix "Out" -ModulePrefix "MyMod"
+Template-SubNewPSModule -Path "C:\temp" -Name "MyModule" -Author "Me" -VerbPrefix "Out" -ModulePrefix "MyMod"
 ```
 
 Publish the powershell script module to the powershell gallery.
 ```
-Publish-SubPSModule -Path "C:\temp" -Packagename "MyModule"
+Publish-SubPSModule -Path "C:\temp" -Name "MyModule"
+```
+
+Updates a powershell module if necessaray
+```
+Update-SubModule -Name "SetUpBasic"
 ```

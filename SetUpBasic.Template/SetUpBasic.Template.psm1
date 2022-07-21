@@ -7,7 +7,7 @@ function Template-SubNewPSModule {
     param(
         [string]$Path,
         [Parameter(Mandatory)]
-        [string]$PackageName,
+        [string]$Name,
         [Parameter(Mandatory)]
         [string]$Author,
         [Parameter(Mandatory)]
@@ -16,5 +16,5 @@ function Template-SubNewPSModule {
         [string]$ModulePrefix
     )
     
-    Private-Template-SubNewPSModule -Path "$Path" -PackageName "$PackageName" -VerbPrefix "$VerbPrefix" -ModulePrefix "$ModulePrefix" -Author "$Author" 
+    Private-Template-SubNewPSModule -Path "$Path" -Name "$Name" -VerbPrefix "$VerbPrefix" -ModulePrefix "$ModulePrefix" -Author "$Author" 
 }

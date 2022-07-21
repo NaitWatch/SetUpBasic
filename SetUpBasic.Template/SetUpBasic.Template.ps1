@@ -6,7 +6,7 @@ function Private-Template-SubNewPSModule {
     param(
         [string]$Path,
         [Parameter(Mandatory)]
-        [string]$PackageName,
+        [string]$Name,
         [Parameter(Mandatory)]
         [string]$Author,
         [Parameter(Mandatory)]
@@ -32,7 +32,7 @@ function Private-Template-SubNewPSModule {
         Write-Information "New directory created. $Path"
     }
 
-    $PackageDirectory = "$Path\$PackageName"
+    $PackageDirectory = "$Path\$Name"
 
 $lic = `
 @"
@@ -62,7 +62,7 @@ $lic = `
 $psm1RootModule = `
 @"
 
-. "`$PSScriptRoot\$PackageName.ps1"
+. "`$PSScriptRoot\$Name.ps1"
 
 function $($VerbPrefix)-$($ModulePrefix)ReplaceMe {
     Private-$($VerbPrefix)-$($ModulePrefix)ReplaceMe
@@ -87,15 +87,15 @@ function Private-$($VerbPrefix)-$($ModulePrefix)ReplaceMe {
         New-Item -ItemType Directory -Path $PackageDirectory  | Out-Null
 
             #Create a empty root module if no rootmodule exists
-        if (!(Test-Path "$PackageDirectory\$PackageName.psm1"))
+        if (!(Test-Path "$PackageDirectory\$Name.psm1"))
         {
-            New-Item -path "$PackageDirectory" -name "$PackageName.psm1" -type "file" -value "$psm1RootModule"  | Out-Null
+            New-Item -path "$PackageDirectory" -name "$Name.psm1" -type "file" -value "$psm1RootModule"  | Out-Null
         }
 
         #Create a empty root module if no rootmodule exists
-        if (!(Test-Path "$PackageDirectory\$PackageName.ps1"))
+        if (!(Test-Path "$PackageDirectory\$Name.ps1"))
         {
-            New-Item -path "$PackageDirectory" -name "$PackageName.ps1" -type "file" -value "$ps1RootModule"  | Out-Null
+            New-Item -path "$PackageDirectory" -name "$Name.ps1" -type "file" -value "$ps1RootModule"  | Out-Null
         }
 
         #Create a default license 
@@ -104,30 +104,30 @@ function Private-$($VerbPrefix)-$($ModulePrefix)ReplaceMe {
             New-Item -path "$PackageDirectory" -name "LICENSE.txt" -type "file" -value "$lic"  | Out-Null
         }
 
-        if (!(Test-Path "$PackageDirectory\$PackageName.psd1"))
+        if (!(Test-Path "$PackageDirectory\$Name.psd1"))
         {
             $guid = "$([guid]::NewGuid())"
 
             New-ModuleManifest `
-            -Path "$PackageDirectory\$PackageName.psd1" `
+            -Path "$PackageDirectory\$Name.psd1" `
             -GUID "$guid" `
-            -Description "Powershell module $PackageName. This module is under construction and just uploaded for testing purposes." `
-            -Tags @('alpha',$PackageName) `
-            -LicenseUri "https://www.powershellgallery.com/packages/$PackageName/0.0.0.0/Content/LICENSE.txt" `
-            -ProjectUri "https://www.powershellgallery.com/packages/$PackageName" `
+            -Description "Powershell module $Name. This module is under construction and just uploaded for testing purposes." `
+            -Tags @('alpha',$Name) `
+            -LicenseUri "https://www.powershellgallery.com/packages/$Name/0.0.0.0/Content/LICENSE.txt" `
+            -ProjectUri "https://www.powershellgallery.com/packages/$Name" `
             -FunctionsToExport @("$($VerbPrefix)-$($ModulePrefix)ReplaceMe") `
             -ModuleVersion "0.0.0.0" `
-            -RootModule "$PackageName.psm1" `
+            -RootModule "$Name.psm1" `
             -Author "$Author"
 
-            (Get-Content -path "$PackageDirectory\$PackageName.psd1") | Set-Content -Encoding default -Path "$PackageDirectory\$PackageName.psd1"
+            (Get-Content -path "$PackageDirectory\$Name.psd1") | Set-Content -Encoding default -Path "$PackageDirectory\$Name.psd1"
             
         }
 
         Write-Host "Default files have been created in $PackageDirectory." -ForegroundColor black -BackgroundColor white
         Write-Host "You can import your module in the current session. -> " -NoNewline
-        Write-Host "Import-Module ""$PackageDirectory\$PackageName.psd1"" -Verbose -Force" -ForegroundColor Yello
+        Write-Host "Import-Module ""$PackageDirectory\$Name.psd1"" -Verbose -Force" -ForegroundColor Yello
         Write-Host "If you want to check the imported commands in the current session. -> " -NoNewline
-        Write-Host "Get-Module $PackageName | ForEach-Object { Get-Command -Module `$PSItem }" -ForegroundColor Yello
+        Write-Host "Get-Module $Name | ForEach-Object { Get-Command -Module `$PSItem }" -ForegroundColor Yello
     }
 }

@@ -61,9 +61,10 @@ function Dd {
 #Template-SubNewPSModule -PackageName "SetUpBasic.Template" -VerbPrefix "Template" -ModulePrefix "Sub" -Author "Naitwatch" 
 
 Publish-SubPSModule -PackageName "SetUpBasic.TaskScheduler"
-Publish-SubPSModule -PackageName "SetUpBasic.Publish"
-Publish-SubPSModule -PackageName "SetUpBasic.Template"
-Publish-SubPSModule -PackageName "SetUpBasic"
+#Publish-SubPSModule -PackageName "SetUpBasic.Publish"
+#Publish-SubPSModule -PackageName "SetUpBasic.Template"
+#Publish-SubPSModule -PackageName "SetUpBasic"
+
 #Publish-SubPSModule -PackageName "SetUpBasic.Publish"
 #Publish-SubPSModule -PackageName "SetUpBasic.Update"
 #Publish-SubPSModule -PackageName "SetUpBasic"

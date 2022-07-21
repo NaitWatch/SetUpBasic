@@ -75,6 +75,8 @@ function $($VerbPrefix)-$($ModulePrefix)ReplaceMe {
 $ps1RootModule = `
 @"
 function Private-$($VerbPrefix)-$($ModulePrefix)ReplaceMe {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseApprovedVerbs", "")]
+    param()
     Write-Host ("Hello world form: {0} ." -f `$MyInvocation.MyCommand)
 }
 "@

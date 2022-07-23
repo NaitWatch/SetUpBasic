@@ -49,10 +49,10 @@ function Private-Update-SubModule {
         #Install the module
         if ($IsAdmin)
         {
-            Install-Module -Name "$Name" -Scope AllUsers -Force -Repository "PSGallery" -AllowClobber -RequiredVersion "$latestOnlineVersion" 3>$null
+            Install-Module -Name "$Name" -Scope AllUsers -Force -Repository "PSGallery" -AllowClobber -RequiredVersion "$latestOnlineVersion" -WarningAction SilentlyContinue
         }
         else {
-            Install-Module -Name "$Name" -Scope CurrentUser -Force -Repository "PSGallery" -AllowClobber -RequiredVersion "$latestOnlineVersion" 3>$null
+            Install-Module -Name "$Name" -Scope CurrentUser -Force -Repository "PSGallery" -AllowClobber -RequiredVersion "$latestOnlineVersion" -WarningAction SilentlyContinue
         }
 
         <#

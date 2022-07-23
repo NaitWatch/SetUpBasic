@@ -60,7 +60,7 @@ function Dd {
 #Template-SubNewPSModule -PackageName "SetUpBasic.TaskScheduler" -VerbPrefix "New" -ModulePrefix "Sub" -Author "Naitwatch" 
 #Template-SubNewPSModule -PackageName "SetUpBasic.Template" -VerbPrefix "Template" -ModulePrefix "Sub" -Author "Naitwatch" 
 
-Publish-SubPSModule -Name "SetUpBasic"
+Publish-SubPSModule -Name "SetUpBasic.TaskScheduler"
 
 
 #Publish-SubPSModule -Name "SetUpBasic.Publish"

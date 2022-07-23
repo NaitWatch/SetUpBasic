@@ -188,6 +188,16 @@ function Private-Script-Task-Helper {
         $NewProgram = "$PSScriptRoot\SubSystemWin.exe"
         $NewArguments = """$([System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName)"" -NonInteractive -ExecutionPolicy Bypass -File $($Program.Value) $($Arguments.Value)"
     }
+    elseif (($Program.Value.EndsWith(".bat") -or $Program.Value.EndsWith(".cmd")) -and ($HideScripts -eq $false))
+    {
+        $NewProgram = "$($env:comspec)"
+        $NewArguments = "/c $($Program.Value) $($Arguments.Value)"
+    }
+    elseif (($Program.Value.EndsWith(".bat") -or $Program.Value.EndsWith(".cmd"))  -and ($HideScripts -eq $true))
+    {
+        $NewProgram = "$PSScriptRoot\SubSystemWin.exe"
+        $NewArguments = """$($env:comspec)"" /c ""$($Program.Value)"" $($Arguments.Value)"
+    }
     else {
         $NewProgram = $Program.Value
         $NewArguments = $Arguments.Value 
@@ -204,7 +214,11 @@ function Private-Script-CreateSampleScript {
         [Parameter(Mandatory)]
         [string]$Location
     )
+    
 
+
+    if ($Location.EndsWith(".ps1"))
+    {
 $sample = `
 @"
 `$ErrorActionPreference="SilentlyContinue"
@@ -218,6 +232,18 @@ Write-Host "Our commands here"
 
 Stop-Transcript
 "@
+    }
+    elseif ($Location.EndsWith(".bat") -or $Location.EndsWith(".cmd")) {
+$sample = `
+@"
+@echo off
+echo hello > %~dp0foo.log
+echo %0 >> %~dp0foo.log
+echo 1 >> %~dp0foo.log
+echo 2 >> %~dp0foo.log
+echo 3 >> %~dp0foo.log
+"@       
+    }
 
     New-Item -path "$Location" -ItemType "file" -Force -value "$sample"  | Out-Null
 

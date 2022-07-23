@@ -34,6 +34,7 @@ SubUpdate ; SubClean
 Install-Module -Name SetUpBasic.Publish -Scope CurrentUser -Force
 Install-Module -Name SetUpBasic.Template -Scope CurrentUser -Force
 Install-Module -Name SetUpBasic.Update -Scope CurrentUser -Force
+Install-Module -Name SetUpBasic.TaskScheduler -Scope CurrentUser -Force
 ```
 
 
@@ -69,18 +70,28 @@ Publish the powershell script module to the powershell gallery.
 Publish-SubPSModule -Path "C:\temp" -Name "MyModule"
 ```
 
-Updates a powershell module if necessaray from the PSGallery
+Updates your local computer with the latest module version from the PSGallery, if a newer version is available.
 ```
 Update-SubModule -Name "MyModule"
 ```
 
-Creates a windows scheduled task that runs user at logon, $HideScript invokes SubSystemWin.exe which hides the console window, see Windows Task Scheduler
+### Maintenance.
+
+Creates a windows scheduled task that runs user at logon, -HideScript $true invokes SubSystemWin.exe which hides the console window, see Windows Task Scheduler. Source of the SubSystemWin.exe can be found in the repository under Binaries
 ```
-New-SubTask -Name "foo" -Program "C:\temp\foo.ps1" -HideScript $true
+New-SubTask -Name "foops1" -Program "C:\temp\foo.ps1" -HideScript $true
+```
+
+Creates a scheduled task that will be executed at a specific time. Admin rights are required because of SYSTEM user execution. If you omit -day parameter the default ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') is used.
+```
+New-SubTask -Name "foops1" -Program "C:\temp\foo.ps1" -ScheduleType TIME -LogonUserType SYSTEM -Time "04:00:00" -day @("Sunday")
 ```
 
 Creates a windows scheduled task that runs user at logon, foo.ps1 will be created with a simple template.
 ```
-New-SubCreateDefaultLogonTask -Name "foo" -Program "C:\temp\foo.ps1" 
+New-SubCreateDefaultLogonTask -Name "foops1" -Location "C:\temp\foo.ps1"
+New-SubCreateDefaultLogonTask -Name "foocmd" -Location "C:\temp\foo.cmd"
+#The next line would modify the default example file foo.ps1 to run under the system account at the same time each day.
+#New-SubTask -Name "foops1" -Program "C:\temp\foo.ps1" -ScheduleType TIME -LogonUserType SYSTEM -Time "04:00:00"
 ```
 

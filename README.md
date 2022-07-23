@@ -24,6 +24,10 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope Process -Force ;
 Install-Module -Name SetupBasic -Scope CurrentUser -Force
 ```
 
+**Installation screenshot Win10**
+
+![grafik](https://user-images.githubusercontent.com/97656046/180610957-2b511bc8-0e97-4033-ad9a-41ea03f6f4b6.png)
+
 ### Update
 ```
 SubUpdate ; SubClean

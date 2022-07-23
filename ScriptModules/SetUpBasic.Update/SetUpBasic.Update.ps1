@@ -14,7 +14,7 @@ function Private-Update-SubModule {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
     try {
-        $latestOnlineVersion = (Find-Module -Name "$Name").Version
+        $latestOnlineVersion = [System.Version](Find-Module -Name "$Name").Version
     }
     catch {
         $latestOnlineVersion = [System.Version]::new()
@@ -22,9 +22,13 @@ function Private-Update-SubModule {
 
     $localmodules = (Get-Module -ListAvailable "$Name") | Sort-Object Version -Descending
 
-    if ($localmodules.Count -gt 0)
+    if ($localmodules.Count -gt 1)
     {
         $latestLocalVersion = $localmodules[0].Version
+    }
+    elseif ($localmodules.Count -eq 1)
+    {
+        $latestLocalVersion = [System.Version]$localmodules.Version
     }
     else {
         $latestLocalVersion = [System.Version]::new()
@@ -65,5 +69,3 @@ function Private-Update-SubModule {
         
     }
 }
-
-

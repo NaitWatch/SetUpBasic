@@ -20,3 +20,16 @@ function New-SubTask {
 
     Private-New-SubTask -Name $Name -Program $Program -Arguments $Arguments -ScheduleType $ScheduleType -LogonUserType $LogonUserType -HideScripts $HideScripts -Time $Time -day $day
 }
+
+function New-SubCreateDefaultLogonTask {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseApprovedVerbs", "")]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+        [Parameter(Mandatory)]
+        [string]$Location,
+        [bool]$HideScript = $false
+    )
+
+    Private-New-SubCreateDefaultLogonTask -Name $Name -Location $Location -HideScript $HideScript
+}

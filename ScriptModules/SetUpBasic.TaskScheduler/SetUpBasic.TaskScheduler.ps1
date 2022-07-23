@@ -183,7 +183,7 @@ function Private-Script-Task-Helper {
         $NewProgram = "$([System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName)"
         $NewArguments = "-ExecutionPolicy Bypass -File $($Program.Value) $($Arguments.Value)"
     }
-    if ($Program.Value.EndsWith(".ps1") -and ($HideScripts -eq $true))
+    elseif ($Program.Value.EndsWith(".ps1") -and ($HideScripts -eq $true))
     {
         $NewProgram = "$PSScriptRoot\SubSystemWin.exe"
         $NewArguments = """$([System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName)"" -NonInteractive -ExecutionPolicy Bypass -File $($Program.Value) $($Arguments.Value)"
@@ -198,28 +198,40 @@ function Private-Script-Task-Helper {
 
 }
 
-#(Get-ChildItem -recurse -LiteralPath 'C:\Windows\System32\Tasks' -File) |  where-object { $_.VersionInfo -Like '*RBCM*' } | Select-Object -Property FullName
-function test{
-   
+function Private-Script-CreateSampleScript {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseApprovedVerbs", "")]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Location
+    )
 
-    #Get-ScheduledTask -TaskPath '*' | where-object { $_.TaskPath -Like '*xxxx*' } | ForEach-Object { Unregister-ScheduledTask -TaskName $_.TaskName -TaskPath $_.TaskPath -Confirm:$false }
-    
-    #must be x64 session
-    $usr = "local"
-    $pawd = "123"
-    Remove-LocalUser -Name "$usr" | Out-Null
-    New-LocalUser "$usr" -Password (ConvertTo-SecureString "$pawd" -AsPlainText -Force) -FullName "$usr" -Description "$usr" -AccountNeverExpires -PasswordNeverExpires -UserMayNotChangePassword
-    Add-LocalGroupMember -Group "Administrators" -Member "$usr"
+$sample = `
+@"
+`$ErrorActionPreference="SilentlyContinue"
+Stop-Transcript | out-null
+`$ErrorActionPreference = "Continue"
+`$logFileTime = [System.DateTime]::UtcNow.ToString("yyyy_MM_dd_HH_mm_ss_fff")
+Start-Transcript -path "`$PSScriptRoot\`$(`$MyInvocation.MyCommand.Name)_`$logFileTime.log" -append -Force -IncludeInvocationHeader
 
-    Stop-Service -Name "Fax" -Force
-    Set-Service  -Name "Fax" -Startuptype Disable
-    #Remove-Service -Name "Fax"
+Write-Host "Hello form `$PSScriptRoot\`$(`$MyInvocation.MyCommand.Name)"
+Write-Host "Our commands here"
 
-    #test
-    #$x = 1
+Stop-Transcript
+"@
+
+    New-Item -path "$Location" -ItemType "file" -Force -value "$sample"  | Out-Null
+
 }
 
-
-#Private-New-SubTask -Name "1aaatesting" -Program "C:\temp\test.ps1" -Arguments "-Argss abs" -ScheduleType LOGON -LogonUserType CURRENTUSER
-#New-SubTask -Name "1aaatesting" -Program "C:\temp\test.ps1" -HideScript $true -ScheduleType LOGON -LogonUserType CURRENTUSER
-#Private-New-SubTask -Name "1aaatesting" -Program "C:\temp\test.ps1" -HideScript $true
+function Private-New-SubCreateDefaultLogonTask {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseApprovedVerbs", "")]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+        [Parameter(Mandatory)]
+        [string]$Location,
+        [bool]$HideScript = $false
+    )
+    Private-Script-CreateSampleScript -Location "$Location"
+    Private-New-SubTask -Name "$Name" -Program "$Location" -HideScript $HideScript
+}

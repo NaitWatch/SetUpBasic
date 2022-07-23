@@ -69,7 +69,18 @@ Publish the powershell script module to the powershell gallery.
 Publish-SubPSModule -Path "C:\temp" -Name "MyModule"
 ```
 
-Updates a powershell module if necessaray
+Updates a powershell module if necessaray from the PSGallery
 ```
-Update-SubModule -Name "SetUpBasic"
+Update-SubModule -Name "MyModule"
 ```
+
+Creates a windows scheduled task that runs user at logon, $HideScript invokes SubSystemWin.exe which hides the console window, see Windows Task Scheduler
+```
+New-SubTask -Name "foo" -Program "C:\temp\foo.ps1" -HideScript $true
+```
+
+Creates a windows scheduled task that runs user at logon, foo.ps1 will be created with a simple template.
+```
+New-SubCreateDefaultLogonTask -Name "foo" -Program "C:\temp\foo.ps1" 
+```
+

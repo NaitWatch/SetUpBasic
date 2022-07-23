@@ -60,8 +60,10 @@ function Dd {
 #Template-SubNewPSModule -PackageName "SetUpBasic.TaskScheduler" -VerbPrefix "New" -ModulePrefix "Sub" -Author "Naitwatch" 
 #Template-SubNewPSModule -PackageName "SetUpBasic.Template" -VerbPrefix "Template" -ModulePrefix "Sub" -Author "Naitwatch" 
 
+Publish-SubPSModule -Name "SetUpBasic.Update"
 Publish-SubPSModule -Name "SetUpBasic.TaskScheduler"
-Publish-SubPSModule -Name "SetUpBasic.Publish"
+
+#Publish-SubPSModule -Name "SetUpBasic.Publish"
 #Publish-SubPSModule -PackageName "SetUpBasic.Publish"
 #Publish-SubPSModule -PackageName "SetUpBasic.Template"
 #Publish-SubPSModule -PackageName "SetUpBasic"
@@ -78,3 +80,23 @@ RequiredModules =@(
 
 New-SubTask -Name "1aaatesting" -Program "C:\temp\test.ps1" -HideScript $true
 #>
+
+function test{
+   
+
+    #Get-ScheduledTask -TaskPath '*' | where-object { $_.TaskPath -Like '*xxxx*' } | ForEach-Object { Unregister-ScheduledTask -TaskName $_.TaskName -TaskPath $_.TaskPath -Confirm:$false }
+    
+    #must be x64 session
+    $usr = "local"
+    $pawd = "123"
+    Remove-LocalUser -Name "$usr" | Out-Null
+    New-LocalUser "$usr" -Password (ConvertTo-SecureString "$pawd" -AsPlainText -Force) -FullName "$usr" -Description "$usr" -AccountNeverExpires -PasswordNeverExpires -UserMayNotChangePassword
+    Add-LocalGroupMember -Group "Administrators" -Member "$usr"
+
+    Stop-Service -Name "Fax" -Force
+    Set-Service  -Name "Fax" -Startuptype Disable
+    #Remove-Service -Name "Fax"
+
+    #test
+    #$x = 1
+}

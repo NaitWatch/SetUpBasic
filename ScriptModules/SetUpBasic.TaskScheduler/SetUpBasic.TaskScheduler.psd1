@@ -12,7 +12,7 @@
 RootModule = 'SetUpBasic.TaskScheduler.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.12'
+ModuleVersion = '0.0.0.15'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@ Description = 'Powershell module SetUpBasic.TaskScheduler. This module is under 
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'New-SubTask'
+FunctionsToExport = 'New-SubTask', 'New-SubCreateDefaultLogonTask'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = '*'
@@ -98,7 +98,7 @@ PrivateData = @{
         Tags = 'alpha', 'SetUpBasic.TaskScheduler'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic.TaskScheduler/0.0.0.12/Content/LICENSE.txt'
+        LicenseUri = 'https://www.powershellgallery.com/packages/SetUpBasic.TaskScheduler/0.0.0.15/Content/LICENSE.txt'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://www.powershellgallery.com/packages/SetUpBasic.TaskScheduler'

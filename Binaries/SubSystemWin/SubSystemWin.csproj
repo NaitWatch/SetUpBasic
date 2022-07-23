@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net452</TargetFrameworks>
+	  <LangVersion>10</LangVersion>
+	  <ImplicitUsings>disable</ImplicitUsings>
+	  <Optimize>False</Optimize>
+	  <DebugType>embedded</DebugType>
+
+	  <Copyright>(c) Naitwatch 2022</Copyright>
+	  <Authors>Naitwatch</Authors>
+	  <Version>0.0.0.1</Version>
+	  <FileVersion>0.0.0.1</FileVersion>
+	  <AssemblyTitle>SubSystemWin a wrapper to hide console output</AssemblyTitle>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+</Project>

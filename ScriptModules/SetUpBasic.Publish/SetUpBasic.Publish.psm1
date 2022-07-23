@@ -4,10 +4,10 @@
 function Publish-SubPSModule {
     
     param(
-        [string]$Path,
         [Parameter(Mandatory)]
-        [string]$Name
+        [string]$Name,
+        [string]$Path
     )
 
-    Publish-PrivateSubPSModule -Path "$Path" -$Name "$Name" 
+    Publish-PrivateSubPSModule -Path "$Path" -Name "$Name" 
 }

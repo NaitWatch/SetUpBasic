@@ -1,1 +1,6 @@
 /clipboard.txt
+/Binaries/*/.vs/**
+/Binaries/*/bin/**
+/Binaries/*/obj/**
+/Binaries/*/*.csproj.user
+/Binaries/*/Properties/launchSettings.json

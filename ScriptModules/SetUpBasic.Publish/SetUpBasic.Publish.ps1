@@ -95,6 +95,7 @@ function Publish-PrivateSubPSModule
     Publish-Module -Path "$PackageDirectory" -NuGetApiKey "$text" -Repository "PSGallery"
     $global:progresspreference = 'Continue'            # Subsequent calls do display UI.
     Write-Host "Uploaded $Name version: $ManifestVersionInc"
+    Write-Host "If SetUpBasic.Update is installed use Update-SubModule -Name ""$Name"" to update the local module."
 
 }
 

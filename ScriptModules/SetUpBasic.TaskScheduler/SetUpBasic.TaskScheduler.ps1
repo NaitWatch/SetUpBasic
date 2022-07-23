@@ -75,18 +75,20 @@ function EasyTaskscheduler {
     Register-ScheduledTask "$Name" -Force -InputObject $task
 }
 
-enum LogonUserType
-{
-    SYSTEM = 0
-    CURRENTUSER = 1
-    ANYUSER = 2
+Add-Type @'
+public enum LogonUserType {
+    SYSTEM = 0,
+    CURRENTUSER = 1,
+    ANYUSER = 2,
 }
+'@
 
-enum ScheduleType
-{
-    TIME = 0
-    LOGON = 1
+Add-Type @'
+public enum ScheduleType{
+    TIME = 0,
+    LOGON = 1,
 }
+'@
 
 function Private-New-SubTask {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseApprovedVerbs", "")]
@@ -97,8 +99,9 @@ function Private-New-SubTask {
         [string]$Program,
         [string]$Arguments = "",
 
-        [ScheduleType]$ScheduleType = [ScheduleType]::TIME,
+        [ScheduleType]$ScheduleType = [ScheduleType]::LOGON,
         [LogonUserType]$LogonUserType = [LogonUserType]::CURRENTUSER,
+        [bool]$HideScripts = $false,
 
         [timespan]$Time,
         [dayofweek[]]$day = ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday')
@@ -115,7 +118,7 @@ function Private-New-SubTask {
         $startTime = $($(Get-Date) - $(Get-Date).TimeOfDay) + $Time
     }
 
-    Private-Script-Task-Helper -Program ([ref]$Program) -Arguments ([ref]$Arguments)
+    Private-Script-Task-Helper -Program ([ref]$Program) -Arguments ([ref]$Arguments) -HideScripts $HideScripts
 
     if ($Arguments.Trim() -eq "")
     {
@@ -161,7 +164,7 @@ function Private-New-SubTask {
 
     $task = New-ScheduledTask -Action $actions -Principal $principal -Trigger $trigger -Settings $settings
 
-    Register-ScheduledTask "$Name" -Force -InputObject $task
+    Register-ScheduledTask "$Name" -Force -InputObject $task | Out-Null
 }
 
 function Private-Script-Task-Helper {
@@ -170,16 +173,20 @@ function Private-Script-Task-Helper {
         [Parameter(Mandatory)]
         [ref]$Program,
         [Parameter(Mandatory)]
-        [ref]$Arguments
+        [ref]$Arguments,
+        [Parameter(Mandatory)]
+        [bool]$HideScripts
     )
 
-    [string]$NewProgram
-    [string]$NewArguments
-
-    if ($Program.Value.EndsWith(".ps1"))
+    if ($Program.Value.EndsWith(".ps1") -and ($HideScripts -eq $false))
     {
         $NewProgram = "$([System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName)"
         $NewArguments = "-ExecutionPolicy Bypass -File $($Program.Value) $($Arguments.Value)"
+    }
+    if ($Program.Value.EndsWith(".ps1") -and ($HideScripts -eq $true))
+    {
+        $NewProgram = "$PSScriptRoot\SubSystemWin.exe"
+        $NewArguments = """$([System.Diagnostics.Process]::GetCurrentProcess().MainModule.FileName)"" -NonInteractive -ExecutionPolicy Bypass -File $($Program.Value) $($Arguments.Value)"
     }
     else {
         $NewProgram = $Program.Value
@@ -214,4 +221,5 @@ function test{
 
 
 #Private-New-SubTask -Name "1aaatesting" -Program "C:\temp\test.ps1" -Arguments "-Argss abs" -ScheduleType LOGON -LogonUserType CURRENTUSER
-
+#New-SubTask -Name "1aaatesting" -Program "C:\temp\test.ps1" -HideScript $true -ScheduleType LOGON -LogonUserType CURRENTUSER
+#Private-New-SubTask -Name "1aaatesting" -Program "C:\temp\test.ps1" -HideScript $true

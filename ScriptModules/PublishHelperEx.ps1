@@ -60,7 +60,8 @@ function Dd {
 #Template-SubNewPSModule -PackageName "SetUpBasic.TaskScheduler" -VerbPrefix "New" -ModulePrefix "Sub" -Author "Naitwatch" 
 #Template-SubNewPSModule -PackageName "SetUpBasic.Template" -VerbPrefix "Template" -ModulePrefix "Sub" -Author "Naitwatch" 
 
-Publish-SubPSModule -PackageName "SetUpBasic.TaskScheduler"
+Publish-SubPSModule -Name "SetUpBasic.TaskScheduler"
+Publish-SubPSModule -Name "SetUpBasic.Publish"
 #Publish-SubPSModule -PackageName "SetUpBasic.Publish"
 #Publish-SubPSModule -PackageName "SetUpBasic.Template"
 #Publish-SubPSModule -PackageName "SetUpBasic"
@@ -74,4 +75,6 @@ RequiredModules =@(
     @{ModuleName="SetUpBasic.Publish"; ModuleVersion="0.0.0.1"; GUID="cfc45206-1e49-459d-a8ad-5b571ef94857"},
     @{ModuleName="SetUpBasic.Template"; ModuleVersion="0.0.0.1"; GUID="cfc45206-1e49-459d-a8ad-5b571ef94857"}
 )
+
+New-SubTask -Name "1aaatesting" -Program "C:\temp\test.ps1" -HideScript $true
 #>
